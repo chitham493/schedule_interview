@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>Schedule Interview List</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="../css/style.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   </head>
+   <body>
+ <!--Modal for View2 -->	
+      <div class="modal fade" id="view_modal_schedule2" role="dialog">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <div class="modal-body">
+                  <div class="box-body form-horizontal" id="view_candidate_modal_div">
+                     <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Name :</label>
+                        <div class="col-sm-6 row-top">
+                           Chithambaram N
+                        </div>
+                     </div>
+                     <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Designation :</label>
+                        <div class="col-sm-6 row-top">
+                           Software Developer
+                        </div>
+                     </div>
+					 <div id="accordion" class="round_colapse_div">
+  <div class="card">
+    <div class="card-header card_rounds" id="headingOne">
+      <h5 class="mb-0">
+        <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Round1
+        </span>
+      </h5>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+      <div class="card-body">
+        <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Date :</label>
+                        <div class="col-sm-6 row-top">
+                           11/12/18
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Time :</label>
+                        <div class="col-sm-6 row-top">
+                           12:23 PM
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Interview Panel:</label>
+                        <div class="col-sm-6 row-top">
+                           zzzzz,xxxx,yyyy
+                        </div>
+                     </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header card_rounds" id="headingTwo">
+      <h5 class="mb-0">
+        <span class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Round2
+        </span>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+      <div class="card-body">
+        <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Date :</label>
+                        <div class="col-sm-6 row-top">
+                           14/12/18
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Time :</label>
+                        <div class="col-sm-6 row-top">
+                           10:23 AM
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Interview Panel:</label>
+                        <div class="col-sm-6 row-top">
+                           sdsds,adas,asdsa
+                        </div>
+                     </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+                     
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+      </div>
+   <!--Modal for Schedule -->	
+      <div class="modal fade" id="schedule_modal_schedule" role="dialog">
+         <div class="modal-dialog modal-md">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <div class="modal-body">
+                  <div class="row" class="add_candidate_form_div">
+                     <form id="add_candidate_form">
+                        <div class="form-row">
+                           <div class="form-group col-md-2">
+                              <label for="date">Date:</label>
+                           </div>
+                           <div class="form-group col-md-4">
+                              <input type="date" class="form-control"  id="schedule_date" >
+                           </div>
+                           <div class="form-group col-md-2">
+                              <label for="date">Time:</label>
+                           </div>
+                           <div class="form-group col-md-4">
+                              <input type="time" class="form-control"  id="schedule_time">
+                           </div>
+                        </div>
+                        <div class="form-row">
+                           <div class="form-group col-md-3">
+                              <label for="inter_pan">Interview Panel:</label>
+                           </div>
+                           <div class="form-group col-md-6">
+                              <select multiple class="form-control" id="schedule_interview_panel">
+                                 <option >karthick</option>
+                                 <option >sumesh</option>
+                                 <option>nagesh</option>
+                              </select>
+                           </div>
+                        </div>
+                        <div class="form-row">
+                           <div class="form-group col-md-12">
+                              <button type="submit" class="btn btn-primary">Schedule Interview</button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+      </div>
+    <!--Modal for View -->	
+      <div class="modal fade" id="view_modal_schedule" role="dialog">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <div class="modal-body">
+                  <div class="box-body form-horizontal" id="view_candidate_modal_div">
+                     <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Name :</label>
+                        <div class="col-sm-6 row-top">
+                           Chithambaram N
+                        </div>
+                     </div>
+                     <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Designation :</label>
+                        <div class="col-sm-6 row-top">
+                           Software Developer
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Date :</label>
+                        <div class="col-sm-6 row-top">
+                           11/12/18
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Time :</label>
+                        <div class="col-sm-6 row-top">
+                           12:23 PM
+                        </div>
+                     </div>
+					 <div class="form-group form-row">
+                        <label class="control-label col-sm-6">Interview Panel:</label>
+                        <div class="col-sm-6 row-top">
+                           zzzzz,xxxx,yyyy
+                        </div>
+                     </div>
+                     
+                  </div>
+               </div>
+               
+            </div>
+         </div>
+      </div>
+   <!--Modal for Delete -->	
+      <div class="modal fade" id="delete_modal_schedule" role="dialog">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+               <div class="modal-body">
+                  <p class="notify_pops">Please confirm to delete interview candidate.</p>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-success">Yes</button>
+                  <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+               </div>
+            </div>
+         </div>
+      </div>
+	  <!--Modal for Edit -->	
+      <div class="modal fade" id="edit_modal_schedule" role="dialog">
+         <div class="modal-dialog modal-md">
+             <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Edit Schedule Interview</h4>
+               </div>
+               <div class="modal-body">
+                  <div class="row" class="add_candidate_form_div">
+                     <form id="add_candidate_form">
+                        <div class="form-row">
+                           <div class="form-group col-md-2">
+                              <label for="date">Date:</label>
+                           </div>
+                           <div class="form-group col-md-4">
+                              <input type="date" class="form-control" value="01:02:2018" id="schedule_date" >
+                           </div>
+                           <div class="form-group col-md-2">
+                              <label for="date">Time:</label>
+                           </div>
+                           <div class="form-group col-md-4">
+                              <input type="time" class="form-control" value="01:02" id="schedule_time">
+                           </div>
+                        </div>
+                        <div class="form-row">
+                           <div class="form-group col-md-3">
+                              <label for="inter_pan">Interview Panel:</label>
+                           </div>
+                           <div class="form-group col-md-6">
+                              <select multiple class="form-control" id="schedule_interview_panel">
+                                 <option selected>Coldfusion Panel</option>
+                                 <option selected>Php Panel</option>
+                                 <option>Node Js Panel</option>
+                              </select>
+                           </div>
+                        </div>
+                        <div class="form-row">
+                           <div class="form-group col-md-12">
+                              <button type="submit" class="btn btn-primary">Edit Candidate</button>
+                           </div>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="container-fluid" >
+         <div  class="row content">
+            <div class="responsive_bar"><i class="fa fa-bars"></i></div>
+            <div id="navigation-app" class="col-xs-2 sidenav">
+               <div id="logo_navs">
+                  <img alt="crm"  src="../Assets/images/crm.png" class="img-responsive">
+                  <div class="responsive_tag">
+                     <i class="fa fa-arrow-left"></i>
+                  </div>
+               </div>
+			   <div id="logo_navs2">
+					<div class="dropdown">
+					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					Chithambaram<span class="glyphicon glyphicon-chevron-down"></span>
+					</button>
+					<div class="dropdown-menu">
+					<a class="dropdown-item" href="#">Logout</a>
+					</div>
+					</div>
+               </div>
+               <div id="nav_plate">
+                  <nav class="navigation" >
+                     <ul  class="nav nav-pills nav-stacked">
+                        <li><a href="home.html">Candidate List</a></li>
+                        <li class="active"><a href="schedule_interview.html">Schedule Interview</a></li>
+						<li ><a href="add_panel.html">Add Panel Member</a></li>
+                        <li ><a href="add_custom.html">Add Custom</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+            <section class="col-xs-12 col-md-10">
+               <header class="jumbotron">
+                  <h2>Schedule Interview List </h2>
+               </header>
+               <div id="content_real">
+                  <div id="content_layout">
+                     <div class="row tabs_shift">
+                        <ul class="nav nav-tabs">
+                           <li class="active"><a data-toggle="tab" onclick="tabs_select(1)" href="#table_lay_div">All</a></li>
+                           <li><a data-toggle="tab" onclick="tabs_select(2)" href="#table_lay_div">Scheduled Candidates</a></li>
+                           <li><a data-toggle="tab" onclick="tabs_select(3)" href="#table_lay_selected_div" class="selected_candidate">Selected Candidates</a></li>
+                        </ul>
+                     </div>
+                     <div class="top_tabelements row">
+                        <div class="col-lg-7">
+                           <div class="row">
+                              <div class="col-md-3 col-lg-3 form-group"><input type="text" class="form-control" placeholder="Category"></div>
+                              <div class="col-md-3 col-lg-3 form-group"><input type="text" class="form-control" placeholder="Job Position"></div>
+                              <div class="col-md-3 col-lg-3 form-group"><input type="text" class="form-control" placeholder="Experience"></div>
+                              <div class="col-md-3 col-lg-3 form-group">
+                                 <button class="btn btn-info"><span>Filter</span></button>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="col-lg-5">
+                           <div class="row">
+                              <div class="col-sm-6">
+                                 <div class="row">
+                                    <div class="expo_pdf col-xs-5">
+                                       <button type="button" class="btn btn-info">
+                                       <span class="glyphicon glyphicon-export"></span> Export
+                                       </button>
+                                    </div>
+                                    
+                                 </div>
+                              </div>
+                              <div class="col-sm-6">
+                                 <form class="search_form row" action="action_page.php">
+                                    <div class="col-md-4">
+                                       <input type="text" placeholder="Search.." name="search">
+                                    </div>
+                                    <div class="col-md-6">
+                                       <button type="submit"><i class="fa fa-search"></i></button>
+                                    </div>
+                                 </form>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <main class="table-responsive" id="table_schedule_layers">
+                        <table id="table_lay1" class="table schedultinter">
+                           <tr>
+                              <th>Name</th>
+                              <th>Job Position</th>
+                              <th class="table_active">Interview Date</th>
+                              <th>Time </th>
+                              <th>Action</th>
+                           </tr>
+                           <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						    <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+                        </table>
+                        <table id="table_lay3" class="table schedultinter">
+                           <tr>
+                              <th>Name</th>
+                              <th>Job Position</th>
+                              <th class="table_active">Interview Date</th>
+                              <th>Time </th>
+                              <th>Action</th>
+                           </tr>
+                           <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td >
+							  
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Schedule"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#schedule_modal_schedule" >assignment</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+							  
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td >
+							  
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Schedule"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#schedule_modal_schedule" >assignment</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+							  
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td >
+							  
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Schedule"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#schedule_modal_schedule" >assignment</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+							  
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td >
+							  
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Schedule"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#schedule_modal_schedule" >assignment</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+							  
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td >
+							  
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Schedule"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#schedule_modal_schedule" >assignment</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+							  
+                              </td>
+                           </tr>
+						  
+                           
+                        </table>
+                        <table id="table_lay2" class="table schedultinter">
+                           <tr>
+                              <th>Name</th>
+                              <th>Job Position</th>
+                              <th class="table_active">Interview Date</th>
+                              <th>Time </th>
+                              <th>Action</th>
+                           </tr>
+                           <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+						   <tr>
+                              <td>Name</td>
+                              <td>Php Developers</td>
+                              <td>16-05-2018</td>
+                              <td>Coldfusion</td>
+                              <td>
+								
+								<a href="#" data-toggle="tooltip" data-placement="bottom" title="Edit"   class="icon_vox can_list cl_edit"><span class="material-icons" data-toggle="modal" data-target="#edit_modal_schedule" >edit</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="Delete" class="icon_vox"><span class="material-icons" data-toggle="modal" data-target="#delete_modal_schedule">delete</span></a>
+                                 <a href="#" data-toggle="tooltip" data-placement="bottom" title="View" class="icon_vox"><span class="material-icons"  data-toggle="modal" data-target="#view_modal_schedule">pageview</span></a>
+                              </td>
+                           </tr>
+                        </table>
+                     </main>
+                     <ul class="pagination">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li class="active"><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">6</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                     </ul>
+                  </div>
+               </div>
+            </section>
+         </div>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>	
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script src="../js/script.js"></script>
+   </body>
+</html>
