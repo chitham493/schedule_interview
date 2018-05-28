@@ -12,9 +12,5 @@ component{
 		application.database_obname="database";	
 		return true;
 	}	
-	// function onError(required any exception, required string eventname){
-
-	// 	writeOutput(exception);
-	// 	writeOutput(eventname);
-	// }
+	
 }                                                              
