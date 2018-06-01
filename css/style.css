@@ -112,7 +112,7 @@ header{
     font-size: 17px;
     display: block;
     width: 100%;
-	text-decoration:none;
+    text-decoration:none;
 
 }
 #logo_navs2 button{
@@ -170,6 +170,10 @@ section{
   text-decoration:none !important;
   color: #3c8cb8;
 }
+.error_disp{
+	color: #b70101b8;
+	font-size: 15px;
+}
 @media screen and (max-width: 767px) {
   .sidenav {
     height: auto;
@@ -179,7 +183,7 @@ section{
 @media only screen and (max-width: 1050px) {
     #navigation-app {
         display: none;
-		width: 172px;
+        width: 172px;
     }
     section {
         float: left !important;
@@ -210,7 +214,7 @@ section{
 	margin:1px;
 	
 }
-.top_tabelements  button{
+.top_tabelements  button,.top_tabelements  a{
 	background:#45a2d5;
 }
 form.search_form input[type=text] {
@@ -276,7 +280,7 @@ a.schedule_active{
 	opacity:0.5;
 }
 label[for=date],label[for=time] { 
-margin-top:5px;
+    margin-top:5px;
 }
 #schedule_form_div{
 	margin:auto;
@@ -287,12 +291,7 @@ margin-top:5px;
 #table_lay1  a,#table_lay2  a,#table_lay3 a,#table_lay a{
 	color: #45a2d5;
 }
-.pagination a{
-	color: #45a2d5;
-}
-.pagination li.active a{
-	background: #45a2d5;
-}
+
 .btn-primary{
 	background: #45a2d5 !important;
 }
@@ -317,7 +316,7 @@ margin-top:5px;
 .nav-tabs {
     font-size: 17px !important;
     font-weight: 500 !important;
-	border-bottom: 1px solid #45a2d5 !important;
+    border-bottom: 1px solid #45a2d5 !important;
 }
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
     color: #555;
@@ -354,3 +353,16 @@ margin-top:5px;
 #submit_review_can{
 	float: right;
 }
+.select2-selection{
+       display: block;
+    width: 245px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    

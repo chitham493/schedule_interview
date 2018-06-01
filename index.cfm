@@ -6,6 +6,14 @@
    </head>
    <body class="dev_login">
       <div class="login-page">
+         <label class="error_disp error_disp_loggs"></label>
+         <cfif structKeyExists(session,"user_session") >
+            <cflocation url="home.cfm">
+         </cfif>
+         <cfif structKeyExists(session,"error_login") >
+            <label class="error_disp"><cfoutput>#session.error_login#</cfoutput></label>
+            <cfset variable.error_logins=structDelete(session,"error_login")>
+         </cfif>
          <form class="form_dev" action="" method="post">
             <img alt="crm"  src="Assets/images/developers.png" class="users_imlogo">
             <label class="error_disp error_disp_username"></label>
@@ -18,5 +26,4 @@
       </div>
       <cfinclude template="parts/footer_include.cfm">
    </body>
-   
 </html>
