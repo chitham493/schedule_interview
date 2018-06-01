@@ -201,7 +201,8 @@ $(function(){
 		type:"POST",
 		data:{action_id:parseInt(action_id)},
 		success:function(html){
-			$("#viewcandidate_modal").modal(html);
+			$("#view_candidate_modal_div").html(html);
+			$("#viewcandidate_modal").modal();
 		}
 	});
 
