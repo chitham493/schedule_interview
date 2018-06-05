@@ -10,4 +10,4 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.9/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
 
-<script src="js/script.js"></script>
+<script src="<cfoutput>#application.domain_name#</cfoutput>js/script.js"></script>

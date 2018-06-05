@@ -1,79 +1,178 @@
-<!--Modal for View Candidate-->
-<div class="modal fade" id="viewcandidate_modal" role="dialog">
+<!--Modal for Delete panelMember -->   
+<div class="modal fade" id="delete_modal_panelmember" role="dialog">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">View Candidate</h4>
          </div>
          <div class="modal-body">
-            <div class="box-body form-horizontal" id="view_candidate_modal_div">
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Name :</label>
-                  <div class="col-sm-6 row-top">
-                     Chithambaram N
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Designation :</label>
-                  <div class="col-sm-6 row-top">
-                     Software Developer
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Email :</label>
-                  <div class="col-sm-4 row-top">
-                     asdsad@gmail.com
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Contact Number :</label>
-                  <div class="col-sm-4 row-top">
-                     dfgfdg
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Location :</label>
-                  <div class="col-sm-4 row-top">
-                     asdsad
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Applied For :</label>
-                  <div class="col-sm-4 row-top">
-                     Coldfusion
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Experience :</label>
-                  <div class="col-sm-4 row-top">
-                     2 years
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Current Ctc :</label>
-                  <div class="col-sm-4 row-top">
-                     ******
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Expected CTC :</label>
-                  <div class="col-sm-4 row-top">
-                     *****************
-                  </div>
-               </div>
-               <div class="form-group form-row">
-                  <label class="control-label col-sm-6">Skill:</label>
-                  <div class="col-sm-4 row-top">
-                     Coldfusion,mysql,sql,java,php,.net,angular-js,react js
-                  </div>
-               </div>
-            </div>
+            <p class="notify_pops">Please confirm to delete panel Member.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_panelmember" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
          </div>
       </div>
    </div>
 </div>
-<!--Modal for Delete -->	
+<!-- Modal For Panel Member  Edit-->
+<div class="modal fade" id="panelmemberedit_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <form action="" id="form_editmembers">
+            <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Edit Panel Member</h4>
+               </div>
+               <div class="modal-body">
+                  <div class="row edit_panelmember_form_div">
+                     
+               </div>
+            </div>
+            <div class="modal-footer">  
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Edit Panel Member</button>
+               </div> 
+            </div>
+         </form>   
+         
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Members Add-->
+<div class="modal fade" id="panelmemberadd_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Panel Members</h4>
+         </div>
+         <form action="" id="form_addmembers">
+         <div class="modal-body row">
+            <div class="add_panelmember_div">
+                  <div class="form-row">
+                     <label class="control-label col-sm-2">First Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="firstname"  name="firstname" placeholder="First Name">
+                     </div>
+                     <label class="control-label col-sm-2">Last Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="lastname"  name="lastname" placeholder="Last Name">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Email</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{3,50}" title="3 to 50 characters" class="form-control" id="email"  name="email" placeholder="Email">
+                     </div>
+                     <label class="control-label col-sm-2">Phone</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="tel" pattern="^[0-9-+()]{3,15}" title="" class="form-control" id="phone"  name="phone" placeholder="Phone" maxlength="10">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">User Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text"   pattern=".{5,20}" required title="5 to 20 characters"  class="form-control" id="username"  name="username" placeholder="User Name">
+                     </div>
+                     <label class="control-label col-sm-2">Password</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="password" class="form-control"  pattern=".{5,20}" required title="5 to 20 characters" id="password"  name="password" placeholder="Password">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Designation</label>
+                     <div class="col-sm-4  form-group">
+                        <cfset  designation_list = database.designation_list()>
+                        <select  class="form-control" name="designation" required>
+                           <option value="">--Please Select--</option>
+                             <cfoutput>
+                                 <cfloop query="designation_list">
+                                    <option value="#DesignationId#">#Name#</option>
+                                 </cfloop>
+                             </cfoutput>
+                        </select>
+                     </div>
+                  </div>
+   </div>
+      </div>
+      <div class="modal-footer">
+      <div class="form-group col-md-12">
+                           <button type="submit" class="btn btn-primary">Add Panel Member</button>
+                        </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
+<!--Modal for Delete panel -->   
+<div class="modal fade" id="delete_modal_panel" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete panel.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_panel" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Panel Edit-->
+<div class="modal fade" id="paneledit_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Panel</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row edit_panel_form_div">
+               
+         </div>
+      </div>
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Add-->
+<div class="modal fade" id="paneladd_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Panel</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row add_panel_form_div">
+               <form id="add_panel_form" action="" >
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <label for="usrname">Panel Name</label>
+                        <input type="text" required class="form-control" name="panel_name" id="panel_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="Panel Name">
+                     </div>
+                    
+                 </div>
+                
+               <div class="form-row">
+                  <div class="form-group col-md-12">
+                     <button type="submit" class="btn btn-primary">Add Panel</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!--Modal for Delete Candidate-->	
 <div class="modal fade" id="delete_modal" role="dialog">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -84,56 +183,8 @@
             <p class="notify_pops">Please confirm to delete interview candidate.</p>
          </div>
          <div class="modal-footer">
-            <button type="button" id="confirm_delete_interview" class="btn btn-success">Yes</button>
+            <button type="button" id="confirm_delete_candidates" class="btn btn-success">Yes</button>
             <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-         </div>
-      </div>
-   </div>
-</div>
-<!--Modal for Schedule Interview -->
-<div class="modal fade" id="schedule_interview_modal" role="dialog">
-   <div class="modal-dialog modal-md">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Schedule Interview</h4>
-         </div>
-         <div class="modal-body">
-            <div class="row" class="add_candidate_form_div">
-               <form id="add_candidate_form">
-                  <div class="form-row">
-                     <div class="form-group col-md-2">
-                        <label for="date">Date:</label>
-                     </div>
-                     <div class="form-group col-md-4">
-                        <input type="date" class="form-control" id="schedule_date" >
-                     </div>
-                     <div class="form-group col-md-2">
-                        <label for="date">Time:</label>
-                     </div>
-                     <div class="form-group col-md-4">
-                        <input type="time" class="form-control" id="schedule_time">
-                     </div>
-                  </div>
-                  <div class="form-row">
-                     <div class="form-group col-md-3">
-                        <label for="inter_pan">Interview Panel:</label>
-                     </div>
-                     <div class="form-group col-md-6">
-                        <select multiple class="form-control" id="schedule_interview_panel">
-                           <option>karthick</option>
-                           <option>sumesh</option>
-                           <option>nagesh</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="form-row">
-                     <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary">Schedule Candidate</button>
-                     </div>
-                  </div>
-               </form>
-            </div>
          </div>
       </div>
    </div>
@@ -156,7 +207,7 @@
                      </div>
                      <div class="form-group col-md-3">
                         <label for="usrname">Last Name</label>
-                        <input type="text" class="form-control" pattern="[A-Za-z]{1,20}" name="cn_lname" id="cn_name" title="3 to 20 characters" placeholder="Last Name" required>
+                        <input type="text" class="form-control" pattern="[A-Za-z]{1,20}" name="cn_lname" id="cn_username" title="3 to 20 characters" placeholder="Last Name" required>
                      </div>
                      <div class="form-group col-md-6">
                         <label for="psw">Applied For</label>
@@ -256,4 +307,84 @@
       </div>
    </div>
   </div>
+</div>
+<!--Modal for View Candidate-->
+<div class="modal fade" id="viewcandidate_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">View Candidate</h4>
+         </div>
+         <div class="modal-body">
+            <div class="box-body form-horizontal" id="view_candidate_modal_div">
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Candidate Edit-->
+<div class="modal fade" id="candidateedit_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Candidate</h4>
+         </div>
+         <div class="modal-body" id="edit_candidate_modal">
+
+         </div>   
+        
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!--Modal for Schedule Interview -->
+<div class="modal fade" id="schedule_interview_modal" role="dialog">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Schedule Interview</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row" class="add_candidate_form_div">
+               <form id="add_schedulecandidate_form">
+                  <div class="form-row">
+                     <div class="form-group col-md-2">
+                        <label for="date">Date:</label>
+                     </div>
+                     <div class="form-group col-md-4">
+                        <input type="date" class="form-control" id="schedule_date" >
+                     </div>
+                     <div class="form-group col-md-2">
+                        <label for="date">Time:</label>
+                     </div>
+                     <div class="form-group col-md-4">
+                        <input type="time" class="form-control" id="schedule_time">
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-3">
+                        <label for="inter_pan">Interview Panel:</label>
+                     </div>
+                     <div class="form-group col-md-6">
+                        <select multiple class="form-control" id="schedule_interview_panel">
+                           <option>karthick</option>
+                           <option>sumesh</option>
+                           <option>nagesh</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary">Schedule Candidate</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
 </div>

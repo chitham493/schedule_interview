@@ -217,6 +217,9 @@ section{
 .top_tabelements  button,.top_tabelements  a{
 	background:#45a2d5;
 }
+.panel_list_column{
+    width:33%;
+}
 form.search_form input[type=text] {
     padding: 3px;
     font-size: 17px;
@@ -352,6 +355,11 @@ label[for=date],label[for=time] {
 }
 #submit_review_can{
 	float: right;
+}
+.msg_header{
+    text-align: center;
+    color: #873c3c;
+    padding: 38px;
 }
 .select2-selection{
        display: block;

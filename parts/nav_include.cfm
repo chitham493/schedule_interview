@@ -1,7 +1,7 @@
 <div class="responsive_bar"><i class="fa fa-bars"></i></div>
 <div id="navigation-app" class="col-xs-2 sidenav">
 	<div id="logo_navs">
-		<img alt="crm"  src="Assets/images/crm.png" class="img-responsive">
+		<img alt="crm"  src="<cfoutput>#application.domain_name#</cfoutput>Assets/images/crm.png" class="img-responsive">
 		<div class="responsive_tag">
 			<i class="fa fa-arrow-left"></i>
 		</div>
@@ -22,10 +22,11 @@
 		<nav class="navigation" >
 			<ul  class="nav nav-pills nav-stacked">
 				<cfset variables.url_page="#listlast(cgi.script_name,"/")#">
-				<li <cfif variables.url_page eq "home.cfm"> class="active" </cfif> ><a href="home.cfm">Candidate List</a></li>
-				<li ><a href="schedule_interview.html">Schedule Interview</a></li>
-				<li ><a href="add_panel.html">Add Panel Member</a></li>
-				<li ><a href="add_custom.html">Add Custom</a></li>
+				<li <cfif variables.url_page eq "home.cfm"> class="active" </cfif> ><a href="<cfoutput>#application.domain_name#</cfoutput>home.cfm">Candidate List</a></li>
+				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>schedule_interview.html">Schedule Interview</a></li>
+				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_members.cfm">Add Panel Member</a></li>
+				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>add_custom.html">Add Custom</a></li>
+				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_list.cfm">Panel Management </a></li>
 			</ul>
 		</nav>
 	</div>

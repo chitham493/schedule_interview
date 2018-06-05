@@ -1,14 +1,243 @@
-$(".responsive_tag").click(function() {
-    $("#navigation-app").fadeOut("slow");
-}); 
-$(".responsive_bar").click(function() {
-    $("#navigation-app").fadeIn("slow");
-});
- $(".add_candidate_but").click(function(){
-	 
- $("#candidateadd_modal").modal();
-	 
+  $(".add_panel_members_but").click(function(){
+   
+ $("#panelmemberadd_modal").modal();
+   
  });
+    $("#panelmemberadd_modal").on("submit", "#form_editmembers", function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({
+            type: 'POST',
+            url: domain + "cfc/database.cfc?method=editpanelmembers",
+            data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+            success: function(result) {
+              result=$.trim(result);
+                if (result == "success") {
+                    $(".modal-content").html("<div class='msg_header'><h3>Insert Successfully!!!</h3></div>");
+                    setTimeout(function() {
+                      location.reload();
+                    }, 3000);
+                }
+             //$("#myModal").css("display", "block");
+            }
+        });
+
+   });
+   $("#panelmemberadd_modal").on("submit", "#form_addmembers", function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+      $.ajax({
+            type: 'POST',
+            url: domain + "cfc/database.cfc?method=addpanelmembers",
+            data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+            success: function(result) {
+              result=$.trim(result);
+                if (result == "success") {
+                    $(".modal-content").html("<div class='msg_header'><h3>Insert Successfully!!!</h3></div>");
+                    setTimeout(function() {
+                      location.reload();
+                    }, 3000);
+                }
+             //$("#myModal").css("display", "block");
+            }
+        });
+
+   });
+  $('#panel_members_table').DataTable( {
+        "bProcessing": true,
+              "bServerSide": true,
+               "responsive": true,
+              "sAjaxSource": domain +'panel/cfc/panel_listmembers.cfc?method=dataTable',
+              "lengthMenu": [[5,10, 25, 50], [5,10, 25, 50]],
+              "rowReorder": {
+            selector: 'td:nth-child(2)'
+                 },
+              columns:
+                      [  
+                      
+                       { title:'Id',name:"PanelId",class: "panelmember_list_column" },
+                       { title:'Name',name:"FirstName",class: "panelmember_list_column" },
+                       { title:'Email',name:"Email",class: "panelmember_list_column" },
+                       { title:'Designation',name:"Designation",class: "panelmember_list_column" },
+                          {
+                                title: "Action",
+                                orderable: false,
+                                data: null,
+                                class: "dt-head-center",
+                                'render': function (data, type, row) {
+                                  
+                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panelmember(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_panelmember(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n'
+               }
+                            }
+                      ]
+    } );
+ function edit_panelmember(id){
+   $.ajax({
+    url:  domain+"cfc/database.cfc?method=edit_panelmember",
+    type:"POST",
+    data:{action_id:parseInt(id)},
+    success:function(html){
+      $(".edit_panelmember_form_div").html(html);
+      $("#panelmemberedit_modal").modal();
+    }
+  });
+
+ }
+ function delete_panelmember(id){
+  $("#delete_modal_panelmember").modal();
+  $("#action_id").val(id);
+  $("#action_page").val("delete_panelmember");
+ }
+ $("#delete_modal_panelmember").on("click", "#confirm_delete_panelmember", function(e) {
+      var action_page=$("#action_page").val();
+      var action_id=$("#action_id").val();
+      if(action_page=='delete_panelmember') {
+          panelmember_list_delete(action_id);
+      }
+      
+   });
+
+ function panelmember_list_delete(action_id){
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=panelmember_list_delete",
+    type:"POST",
+    data:{action_id:parseInt(action_id)},
+    success:function(html){
+      location.reload();
+
+    }
+  }); 
+ }
+ function edit_panel(id){
+   $.ajax({
+    url:  domain+"cfc/database.cfc?method=edit_panel",
+    type:"POST",
+    data:{action_id:parseInt(id)},
+    success:function(html){
+      $(".edit_panel_form_div").html(html);
+      $("#paneledit_modal").modal();
+    }
+  });
+}
+ $(".edit_panel_form_div").on("submit", "#edit_panel_form", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=editpanel_save",
+        data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+        success: function(result) {
+          result=$.trim(result);
+          if (result == "success") {
+              $(".modal-content").html("<center><div class='msg_header'><h3>Edited Successfully!!!</h3></div></center>");
+              setTimeout(function() {
+                location.reload();
+              }, 3000);
+          }
+        }
+    });
+
+  });
+
+ $(".add_panel_form_div").on("submit", "#add_panel_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+  $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=insertpanel",
+        data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+        success: function(result) {
+          result=$.trim(result);
+          if (result == "success") {
+              $(".modal-content").html("<center><div class='msg_header'><h3>Insert Successfully!!!</h3></div></center>");
+              setTimeout(function() {
+                location.reload();
+              }, 3000);
+          }
+        }
+    });
+
+});
+function delete_panel(id){
+  $("#delete_modal_panel").modal();
+  $("#action_id").val(id);
+  $("#action_page").val("delete_panel");
+}
+$("#confirm_delete_panel").click(function(){
+  var action_id=$("#action_id").val();
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=delete_panel",
+    type:"POST",
+    data:{action_id:parseInt(action_id)},
+    success:function(html){
+      alert("success");
+      location.reload();
+    }
+  }); 
+});
+ $('#panel_list').DataTable( {
+        "bProcessing": true,
+              "bServerSide": true,
+               "responsive": true,
+              "sAjaxSource": domain +'panel/cfc/panel_list.cfc?method=dataTable',
+              "lengthMenu": [[5,10, 25, 50], [5,10, 25, 50]],
+              "rowReorder": {
+            selector: 'td:nth-child(2)'
+                 },
+              columns:
+                      [  
+                      
+                       { title:'Id',name:"PanelId",class: "panel_list_column" },
+                       { title:'Name',name:"Name",class: "panel_list_column" },
+                          {
+                                title: "Action",
+                                orderable: false,
+                                data: null,
+                                class: "dt-head-center",
+                                'render': function (data, type, row) {
+                                  
+                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panel(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" onclick=\"return delete_panel(\''+row[0]+'\')\"  data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>'
+               }
+                            }
+                      ]
+    } );
+$(".add_panel_but").click(function(){
+  $("#paneladd_modal").modal();
+ });
+  $(".add_panel_form_div").on("submit", "#add_panel_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+  $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=insertpanel",
+        data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+        success: function(result) {
+          result=$.trim(result);
+          if (result == "success") {
+              $(".modal-content").html("<center><div class='msg_header'><h3>Insert Successfully!!!</h3></div></center>");
+              setTimeout(function() {
+                location.reload();
+              }, 3000);
+          }
+        }
+    });
+
+});
  $(".add_candidate_form_div").on("submit", "#add_candidate_form", function(e) {
 	e.preventDefault();
 	var formData = new FormData(this);
@@ -31,41 +260,11 @@ $(".responsive_bar").click(function() {
             }else if(result == "FileLimit"){
             	alert("FileLimit Should not Exceed 1.5Mb");
             }
-         $("#myModal").css("display", "block");
+         //$("#myModal").css("display", "block");
         }
     });
-
  });
-$(".form_dev").submit(function(e){
-	e.preventDefault();
-	$.ajax({
-		url:  domain+"cfc/logindb.cfc?method=logindb",
-		data:$(this).serialize(),
-		type:"POST",
-		success:function(html){
-			if($.trim(html)=='Success'){
-			window.location.href = domain+"home.cfm";
-		}else{
-			$(".error_disp_loggs").html('invalid Login');
-		}
-		}
-	});
 
-});
-
-  $('[data-toggle="tooltip"]').tooltip();   
- function tabs_select(tabs_select){
-	 $("table[class='table schedultinter']").hide();
-	 $("table[id='table_lay"+tabs_select+"']").show();
-	 
- }
-function assignment(id){
-	$("#schedule_interview_modal").modal();
- }
-function edit_candidate(id){
-	$("#cn_name").val("Chithambaram");
-	 $("#candidateadd_modal").modal();
-}
 $(function(){
 
 
@@ -88,7 +287,7 @@ $(function(){
               "bProcessing": true,
               "bServerSide": true,
                "responsive": true,
-              "sAjaxSource": 'cfc/datatables.cfc?method=dataTable',
+              "sAjaxSource": domain +'cfc/datatables.cfc?method=dataTable',
               "lengthMenu": [[5,10, 25, 50], [5,10, 25, 50]],
               "rowReorder": {
             selector: 'td:nth-child(2)'
@@ -106,12 +305,10 @@ $(function(){
                                 orderable: false,
                                 data: null,
                                 class: "dt-head-center",
-                                defaultContent: [
-                                    "<center>",
-                                    "<a href=\"##\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\'#CandidateId#\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"##\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"#CandidateId#\"><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"##\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n<a href=\"##\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Scheduled\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>",
-                                    "</center>"
-                                ].join(""),
-                                width: "150px"
+                                'render': function (data, type, row) {
+                                  
+                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Scheduled\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>'
+               }
                             }
                       ]
           });
@@ -168,7 +365,7 @@ $(function(){
        globalVars.tableConfigs.column(0).search(candidate_columnfo0).column(1).search(candidate_columnfo1).column(2).search(candidate_columnfo2).column(3).search(candidate_columnfo3).draw();
         
     } );
- $("#delete_modal").on("click", "#confirm_delete_interview", function(e) {
+ $("#delete_modal").on("click", "#confirm_delete_candidates", function(e) {
    		var action_page=$("#action_page").val();
    		var action_id=$("#action_id").val();
    		if(action_page=='candidate_list') {
@@ -182,20 +379,20 @@ $(function(){
 		type:"POST",
 		data:{action_id:parseInt(action_id)},
 		success:function(html){
-			alert("success");
 			location.reload();
 
 		}
 	}); 
  }
+
  $("#table_lay").on("click", ".delete_candidate", function(e) {
    
-      $("#action_id").val($(this).parent().parent().parent().find('.candidate_column0').text());
+      $("#action_id").val($(this).attr("data-column"));
       $("#action_page").val("candidate_list");
       $("#delete_modal").modal();
    });
  $("#table_lay").on("click", ".view_candidate", function(e) {
-     var action_id= $(this).parent().parent().parent().find('.candidate_column0').text();
+     var action_id= $(this).attr("data-column");
       $.ajax({
 		url:  domain+"cfc/database.cfc?method=view_candidate",
 		type:"POST",
@@ -209,7 +406,54 @@ $(function(){
    });
   
 });
-
+ $(".add_candidate_but").click(function(){
+   
+ $("#candidateadd_modal").modal();
+   
+ });
+function edit_candidate(id){
+  
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=edit_candidate",
+    type:"POST",
+    data:{action_id:parseInt(id)},
+    success:function(html){
+      $("#edit_candidate_modal").html(html);
+      $("#candidateedit_modal").modal();
+    }
+  });
+}
+$(".responsive_tag").click(function() {
+    $("#navigation-app").fadeOut("slow");
+}); 
+$(".responsive_bar").click(function() {
+    $("#navigation-app").fadeIn("slow");
+});
+function assignment(id){
+  $("#schedule_interview_modal").modal();
+ }
 $("#cn_resume_skills").select2({
 	  placeholder: "Skills"
 });
+$(".form_dev").submit(function(e){
+  e.preventDefault();
+  $.ajax({
+    url:  domain+"cfc/logindb.cfc?method=logindb",
+    data:$(this).serialize(),
+    type:"POST",
+    success:function(html){
+      if($.trim(html)=='Success'){
+      window.location.href = domain+"home.cfm";
+    }else{
+      $(".error_disp_loggs").html('invalid Login');
+    }
+    }
+  });
+
+});
+  $('[data-toggle="tooltip"]').tooltip();   
+ function tabs_select(tabs_select){
+   $("table[class='table schedultinter']").hide();
+   $("table[id='table_lay"+tabs_select+"']").show();
+   
+ }
