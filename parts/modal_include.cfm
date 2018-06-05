@@ -1,3 +1,27 @@
+<!-- Modal For Panel Members in Panels Add-->
+<div class="modal fade" id="membersinpanel_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Members in Panel</h4>
+         </div>
+         <form action="" id="membersinpanel">
+         <div class="modal-body row">
+            <div class="add_panelmember_div">
+               
+              
+            </div>
+      </div>
+      <div class="modal-footer">
+      <div class="form-group col-md-12">
+                           <button type="submit" class="btn btn-primary">Save</button>
+                        </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
 <!--Modal for Delete panelMember -->   
 <div class="modal fade" id="delete_modal_panelmember" role="dialog">
    <div class="modal-dialog modal-lg">

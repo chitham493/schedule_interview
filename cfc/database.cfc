@@ -16,6 +16,7 @@
       <cfargument name="phone" type="string" required="true">
       <cfargument name="username" type="string" required="true">
       <cfargument name="password" type="string" required="true">
+      <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
       <cfquery name="updatemember" result="updatemember" datasource="#application.datasource#">
         update UserDetails set 
           FirstName = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.firstname#" />,
@@ -24,15 +25,17 @@
           DesignationId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.designation#" />,
           ContactNumber = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.phone#" />,
           UserName = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.username#" />,
-          Password = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.password#" />,
-          ModifiedDate = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">,
-          ModifiedBy = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.logId#" />,
+          ModifiedDate = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+          ModifiedBy = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.user_session#" />,
           Status = 1 where UserId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelmemberid#" /> 
     </cfquery>
-      <cfquery name="updatedmemberinfo" result="updatedmemberinfo" datasource="#application.datasource#">
-        select CONCAT(U.FirstName, ' ', U.LastName) AS membername from UserDetails U where U.UserId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelmemberid#" />
-    </cfquery>
-      <cfreturn updatedmemberinfo>
+    <cfif arguments.password neq "">
+      <cfquery name="updatemember_password" result="updatemember_passwords" datasource="#application.datasource#">
+          update UserDetails set 
+              Password = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#Hash(arguments.password,'MD5')#" />where UserId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelmemberid#" /> AND Status = 1 
+      </cfquery>
+    </cfif>
+       <cfoutput>success</cfoutput>
     </cffunction>
     <cffunction name="edit_panelmember" access="remote">
       <cfargument name="action_id" type="string" required="true">
@@ -69,7 +72,7 @@
                      </div>
                      <label class="control-label col-sm-2">Password</label>
                      <div class="col-sm-4 form-group ">
-                        <input type="password" class="form-control"  value="#Password#"  pattern=".{5,20}" required title="5 to 20 characters" id="password"  name="password" placeholder="Password">
+                        <input type="password" class="form-control"  id="password"  name="password" placeholder="Password">
                      </div>
                   </div>
                   <div class="form-row ">

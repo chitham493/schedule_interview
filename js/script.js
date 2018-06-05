@@ -3,7 +3,7 @@
  $("#panelmemberadd_modal").modal();
    
  });
-    $("#panelmemberadd_modal").on("submit", "#form_editmembers", function(e) {
+    $("#panelmemberedit_modal").on("submit", "#form_editmembers", function(e) {
       e.preventDefault();
       var formData = new FormData(this);
       $.ajax({
@@ -16,7 +16,7 @@
             success: function(result) {
               result=$.trim(result);
                 if (result == "success") {
-                    $(".modal-content").html("<div class='msg_header'><h3>Insert Successfully!!!</h3></div>");
+                    $(".modal-content").html("<div class='msg_header'><h3>Edited Successfully!!!</h3></div>");
                     setTimeout(function() {
                       location.reload();
                     }, 3000);
@@ -72,11 +72,16 @@
                                 class: "dt-head-center",
                                 'render': function (data, type, row) {
                                   
-                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panelmember(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_panelmember(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n'
+                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panelmember(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_panelmember(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>'
                }
                             }
                       ]
     } );
+  function addmembers_to(id){
+
+    $("#membersinpanel_modal").modal();
+
+  }
  function edit_panelmember(id){
    $.ajax({
     url:  domain+"cfc/database.cfc?method=edit_panelmember",
@@ -208,7 +213,7 @@ $("#confirm_delete_panel").click(function(){
                                 class: "dt-head-center",
                                 'render': function (data, type, row) {
                                   
-                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panel(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" onclick=\"return delete_panel(\''+row[0]+'\')\"  data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>'
+                   return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_panel(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" onclick=\"return delete_panel(\''+row[0]+'\')\"  data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a><a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Add Members\" class=\"icon_vox \" onclick=\"return addmembers_to(\''+row[0]+'\')\" ><span class=\"material-icons\">add<\/span><\/a>'
                }
                             }
                       ]
