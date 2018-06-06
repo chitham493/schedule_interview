@@ -1,18 +1,18 @@
 <!-- Modal For Panel Members in Panels Add-->
 <div class="modal fade" id="membersinpanel_modal" role="dialog">
-   <div class="modal-dialog modal-lg">
+   <div class="modal-dialog modal-sm">
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">Members in Panel</h4>
          </div>
-         <form action="" id="membersinpanel">
+         <form action="" id="membersinpanel" method="post">
          <div class="modal-body row">
-            <div class="add_panelmember_div">
+            <div class="add_memberinpanel_div">
                
               
             </div>
-      </div>
+         </div>
       <div class="modal-footer">
       <div class="form-group col-md-12">
                            <button type="submit" class="btn btn-primary">Save</button>

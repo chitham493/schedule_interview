@@ -7,6 +7,61 @@
         <cfreturn myResult.RECORDCOUNT>
       
     </cffunction>
+    <cffunction name="listCompare" output="false" returnType="string"><cfargument name="list1" type="string" required="true" /><cfargument name="list2" type="string" required="true" /><cfset var list1Array = ListToArray(arguments.List1) /><cfset var list2Array = ListToArray(arguments.List2) /><cfset list1Array.removeAll(list2Array) /><!--- Return in list format ---><cfreturn ArrayToList(list1Array) /></cffunction>
+
+<cffunction name="listCommon" output="false" returnType="string"><cfargument name="list1" type="string" required="true" /><cfargument name="list2" type="string" required="true" /><cfset var list1Array = ListToArray(arguments.List1) /><cfset var list2Array = ListToArray(arguments.List2) /><cfset list1Array.retainAll(list2Array) /><!--- Return in list format ---><cfreturn ArrayToList(list1Array) /></cffunction>
+    <cffunction access="remote" name="panelmemberadd_form">
+        <cfargument name="panelid" type="integer" required="true">
+        <cfargument name="PanelMembers" type="string" required="true">
+        <cfargument name="PanelMembers_id" type="string" required="true">
+        <cfset PanelMembers_listCommon = listCommon(arguments.PanelMembers,arguments.PanelMembers_id)>
+        <cfset PanelMembers_delete= listCompare(arguments.PanelMembers_id,PanelMembers_listCommon)>
+        <cfset PanelMembers_add= listCompare(arguments.PanelMembers,PanelMembers_listCommon)>
+         <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+        <cfloop list="#PanelMembers_delete#" index="memberid_delete">       
+        <cfquery name="deletepanelmember" datasource="#application.datasource#" result="panelmembers_delete">
+            update PanelMembers Set Status=0 where UserId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#memberid_delete#" /> AND PanelId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelid#" />
+        </cfquery>
+        </cfloop> 
+        <cfloop list="#PanelMembers_add#" index="memberid">       
+        <cfquery name="insertpanelmember" datasource="#application.datasource#" result="panelmembers">
+            INSERT INTO PanelMembers (PanelId,UserId,CreatedDate,ModifiedDate,Status)
+          VALUES(
+                <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelid#" />,   
+               <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#memberid#" />,  
+               <cfqueryparam cfsqltype="cf_sql_timestamp" value="#variables.todaydate#">,
+               NULL,
+                1
+          )
+        </cfquery>
+      </cfloop><cfoutput>success</cfoutput>
+    </cffunction>
+    <cffunction access="remote" name="getpaneldetails" returntype="any" returnFormat="json">
+      <cfargument name="panelid" type="integer" required="true">
+      <cfquery name="panelinfo" result="panelinfo" datasource="#application.datasource#">       
+      select Distinct PM.PanelId,P.Name as PanelName,(select STUFF((SELECT Distinct ',' + Cast(C.UserId as varchar(35)) from PanelMembers as A inner join UserDetails as C on A.UserId=C.UserId inner join Panel as B on A.PanelId=B.PanelId where  A.PanelId=P.PanelId  AND A.Status=1  FOR XML PATH('')) , 1 , 1 , '' )) as memberlist from Panel P inner join PanelMembers PM on P.PanelId = PM.PanelId inner join UserDetails M on M.UserId = PM.UserId where PM.Status=1 and PM.PanelId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.panelid#" />          
+    </cfquery>    
+      <cfset variable_array=ValueArray(panelinfo,"memberlist")>
+      <cfreturn variable_array[1]>
+    </cffunction>
+    <cffunction name="membersinpanel" access="remote">
+        <cfargument name="id" type="integer" required="true">
+      
+        <cfquery name="membersinpanel" datasource="#application.datasource#" result="myResult">  
+          select * from UserDetails where status=1 And RoleId=2;
+        </cfquery>
+        <div class="col-sm-12 form-group ">
+          <input type="hidden" value="<cfoutput>#arguments.id#</cfoutput>" name="panelid">
+          <select  class="form-control" name="PanelMembers" id="select_membersinpanel" multiple required>
+            <cfoutput>
+                  <cfloop query="membersinpanel">
+                     <option value="#UserId#">#FirstName# #LastName#</option>
+                  </cfloop>
+              </cfoutput>
+          </select>
+          <input type="hidden" value=""  name="PanelMembers_id" id="PanelMembers_id" >
+        </div>
+    </cffunction>
     <cffunction access="remote" name="editpanelmembers"  returntype="any" returnFormat="json">
       <cfargument name="panelmemberid" type="integer" required="true">
       <cfargument name="firstname" type="string" required="true">

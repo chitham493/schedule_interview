@@ -79,19 +79,67 @@
     } );
   function addmembers_to(id){
 
-    $("#membersinpanel_modal").modal();
+      $.ajax({
+      url:  domain+"cfc/database.cfc?method=membersinpanel",
+      type:"POST",
+      data:{id:id},
+      success:function(html){
+        $(".add_memberinpanel_div").html(html);
+        $("#membersinpanel_modal").modal();
+        $("#select_membersinpanel").select2({
+          placeholder: "Select Members"
+          });
+            $.ajax({
+                url:  domain+"cfc/database.cfc?method=getpaneldetails",
+                type:"POST",
+                data:{panelid:id},
+                success:function(response){
+                  response=$.trim(response);
+                if (typeof response !== 'undefined' || response =="") {
+                      response = response.replace('"','');
+                      response = response.replace('"','');
+                      $("#PanelMembers_id").val(response);
+                      result = response.split(',');
+                      $("#select_membersinpanel").val(result); 
+                      $("#select_membersinpanel").trigger('change'); 
+                   }
+                }
+              });
+        }
+       });
 
   }
- function edit_panelmember(id){
-   $.ajax({
-    url:  domain+"cfc/database.cfc?method=edit_panelmember",
-    type:"POST",
-    data:{action_id:parseInt(id)},
-    success:function(html){
-      $(".edit_panelmember_form_div").html(html);
-      $("#panelmemberedit_modal").modal();
-    }
+$("#membersinpanel_modal").on("submit", "#membersinpanel", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+      $.ajax({
+        url:  domain+"cfc/database.cfc?method=panelmemberadd_form",
+        type:"POST",
+        data:formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        success:function(result){
+          result=$.trim(result);
+                if (result == "success") {
+                    $(".modal-content").html("<div class='msg_header'><h3>Added/Deleted Successfully!!!</h3></div>");
+                    setTimeout(function() {
+                      location.reload();
+                    }, 3000);
+                }
+        }
+      });
   });
+ function edit_panelmember(id){
+     $.ajax({
+      url:  domain+"cfc/database.cfc?method=edit_panelmember",
+      type:"POST",
+      data:{action_id:parseInt(id)},
+      success:function(html){
+        $(".edit_panelmember_form_div").html(html);
+        $("#panelmemberedit_modal").modal();
+      }
+    });
 
  }
  function delete_panelmember(id){

@@ -27,6 +27,7 @@
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_members.cfm">Add Panel Member</a></li>
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>add_custom.html">Add Custom</a></li>
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_list.cfm">Panel Management </a></li>
+				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a></li>
 			</ul>
 		</nav>
 	</div>
