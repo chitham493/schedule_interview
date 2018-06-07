@@ -26,26 +26,6 @@ $('#job_vacancy_table').DataTable( {
  }
  ]
 } );
-
-$("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
-  e.preventDefault();
-  var formData = new FormData(this);
-  $.ajax({
-    type: 'POST',
-    url: domain + "cfc/database.cfc?method=selectinground",
-    data:formData,
-    cache:false,
-    contentType: false,
-    processData: false,
-    success: function(result) {
-      result=$.trim(result);
-          var result_array=result.split(',');
-       $('#job_vacancy_modal').modal('toggle');
-   
-    }
-  });
-
-});
 $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
   e.preventDefault();
   var formData = new FormData(this);
@@ -66,21 +46,6 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
         data:{job_vacancy_id:result_array[0],job_rounds:result_array[1]},
         success:function(response){
          $("#selectinground_div").html(response);
-          $("#interviewtypes_skills0").select2({
-           placeholder: "Skills"
-          });
-          $("#interviewtypes_skills1").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills2").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills3").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills4").select2({
-           placeholder: "Skills"
-          });
          $("#selectinground_modal").modal();
           }
         
@@ -90,20 +55,8 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
 
 });
 $(function () {
-  var selectinground_modal_ar=[0,0,0,0,0];
-  $("#selectinground_modal").on("change", ".interviewtypes", function(e) {
-      var  value_interviewtypes=$(this).val();
-
-      if(jQuery.inArray(value_interviewtypes, selectinground_modal_ar) == -1){
-      selectinground_modal_ar[$('.interviewtypes').index(this)]=value_interviewtypes;
-
-            }else{
-              $(this).val("");
-              selectinground_modal_ar[$('.interviewtypes').index(this)]="";
-              alert("Already Assigned");
-
-            }
-console.log(selectinground_modal_ar);
+  $("#selectinground_modal").on("click", ".interviewtypes", function(e) {
+      alert($(this).val());
 
   });
 });

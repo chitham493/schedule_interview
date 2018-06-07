@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<!-- saved from url=(0066)http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm# -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>Job Vacancy</title>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" type="text/css" href="./Job Vacancy_files/style.css">
+<link rel="stylesheet" href="./Job Vacancy_files/font-awesome.min.css">
+<link href="./Job Vacancy_files/icon" rel="stylesheet">
+<link rel="stylesheet" href="./Job Vacancy_files/bootstrap.min.css">
+<link rel="stylesheet" href="./Job Vacancy_files/select2.min.css">
+<link rel="stylesheet" type="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.9/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="./Job Vacancy_files/bootstrap-datetimepicker.min.css">
+<script>
+	var domain="http://localhost:8500/1interview/";
+</script>
+   </head>
+   <body class="" style="">
+            <!-- Modal For selecting rounds-->
+<div class="modal fade in" id="selectinground_modal" role="dialog" style="display: block; padding-left: 17px;">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Select Rounds</h4>
+         </div>
+         <div class="modal-body row" id="selectinground_div"> 
+   <div class="form-group col-md-12">
+    <label>Rounds1</label>
+   <select class="form-control" id="interviewtypes1">
+                          
+      
+      <option>--Please Select--</option>
+    
+        <option value="1">Aptitude</option>
+    
+        <option value="2">Machine Test</option>
+    
+        <option value="3">Technical Interview</option>
+    
+        <option value="4">Hr Interview</option>
+    
+        <option value="5">Final Interview</option>
+    
+     </select>
+ </div>
+      
+     
+   <div class="form-group col-md-12">
+    <label>Rounds2</label>
+   <select class="form-control" id="interviewtypes2">
+                          
+      
+      <option>--Please Select--</option>
+    
+        <option value="1">Aptitude</option>
+    
+        <option value="2">Machine Test</option>
+    
+        <option value="3">Technical Interview</option>
+    
+        <option value="4">Hr Interview</option>
+    
+        <option value="5">Final Interview</option>
+    
+     </select>
+ </div>
+      
+     
+   <div class="form-group col-md-12">
+    <label>Rounds3</label>
+   <select class="form-control" id="interviewtypes3">
+                          
+      
+      <option>--Please Select--</option>
+    
+        <option value="1">Aptitude</option>
+    
+        <option value="2">Machine Test</option>
+    
+        <option value="3">Technical Interview</option>
+    
+        <option value="4">Hr Interview</option>
+    
+        <option value="5">Final Interview</option>
+    
+     </select>
+ </div>
+      
+    </div>  
+         <div class="modal-footer">
+         <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Save</button>
+         </div>  
+      </div> 
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Members Add-->
+<div class="modal fade" id="job_vacancy_modal" role="dialog" style="display: none;">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Add Job Position</h4>
+         </div>
+         <form action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm" id="form_job_vacancy">
+         <div class="modal-body row">
+            <div class="job_vacancy_div">
+                  <div class="form-row">
+                     <label class="control-label col-sm-2">Job Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{3,35}" title="3 to 35 characters" class="form-control" id="JobPosition" required="" name="JobPosition" placeholder="Job Name">
+                     </div>
+                     <label class="control-label col-sm-2">Job Code</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{1,35}" required="" title="1 to 35 characters" class="form-control" id="JobCode" name="JobCode" placeholder="Job Code">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">JobDescription</label>
+                     <div class="col-sm-4 form-group ">
+                        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobDescription" name="JobDescription">                        </textarea>
+                     </div>
+                     <label class="control-label col-sm-2">JobResponsibilty</label>
+                     <div class="col-sm-4 form-group ">
+                        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobResponsibilty" name="JobResponsibilty">                        </textarea>
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">StartDate</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" required="" class="form-control" id="StartDate" name="StartDate">
+                     </div>
+                     <label class="control-label col-sm-2">EndDate</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" class="form-control" required="" id="EndDate" name="EndDate">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Vacancy</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="number" pattern=".{5,20}" required="" title="5 to 20 characters" class="form-control" id="Vacancy" name="Vacancy" placeholder="Vacancy">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Rounds</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="number" min="1" max="5" required="" class="form-control" id="Rounds" name="rounds" placeholder="Rounds">
+                     </div>
+                  </div>
+   </div>
+      </div>
+      <div class="modal-footer">
+         <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Add Panel Member</button>
+         </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
+
+<!-- Modal For Panel Members in Panels Add-->
+<div class="modal fade" id="membersinpanel_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Members in Panel</h4>
+         </div>
+         <form action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm" id="membersinpanel" method="post">
+         <div class="modal-body row">
+            <div class="add_memberinpanel_div">
+               
+              
+            </div>
+         </div>
+      <div class="modal-footer">
+      <div class="form-group col-md-12">
+                           <button type="submit" class="btn btn-primary">Save</button>
+                        </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
+<!--Modal for Delete panelMember -->   
+<div class="modal fade" id="delete_modal_panelmember" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete panel Member.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_panelmember" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Panel Member  Edit-->
+<div class="modal fade" id="panelmemberedit_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <form action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm" id="form_editmembers">
+            <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">×</button>
+                  <h4 class="modal-title">Edit Panel Member</h4>
+               </div>
+               <div class="modal-body">
+                  <div class="row edit_panelmember_form_div">
+                     
+               </div>
+            </div>
+            <div class="modal-footer">  
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Edit Panel Member</button>
+               </div> 
+            </div>
+         </form>   
+         
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Members Add-->
+<div class="modal fade" id="panelmemberadd_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Add Panel Members</h4>
+         </div>
+         <form action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm" id="form_addmembers">
+         <div class="modal-body row">
+            <div class="add_panelmember_div">
+                  <div class="form-row">
+                     <label class="control-label col-sm-2">First Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern="A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="firstname" name="firstname" placeholder="First Name">
+                     </div>
+                     <label class="control-label col-sm-2">Last Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Email</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{3,50}" title="3 to 50 characters" class="form-control" id="email" name="email" placeholder="Email">
+                     </div>
+                     <label class="control-label col-sm-2">Phone</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="tel" pattern="^[0-9-+()]{3,15}" title="" class="form-control" id="phone" name="phone" placeholder="Phone" maxlength="10">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">User Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{5,20}" required="" title="5 to 20 characters" class="form-control" id="username" name="username" placeholder="User Name">
+                     </div>
+                     <label class="control-label col-sm-2">Password</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="password" class="form-control" pattern=".{5,20}" required="" title="5 to 20 characters" id="password" name="password" placeholder="Password">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Designation</label>
+                     <div class="col-sm-4  form-group">
+                        
+                        <select class="form-control" name="designation" required="">
+                           <option value="">--Please Select--</option>
+                             
+                                    <option value="1">TL_coldfusion</option>
+                                 
+                        </select>
+                     </div>
+                  </div>
+   </div>
+      </div>
+      <div class="modal-footer">
+      <div class="form-group col-md-12">
+                           <button type="submit" class="btn btn-primary">Add Panel Member</button>
+                        </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
+<!--Modal for Delete panel -->   
+<div class="modal fade" id="delete_modal_panel" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete panel.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_panel" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Panel Edit-->
+<div class="modal fade" id="paneledit_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Edit Panel</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row edit_panel_form_div">
+               
+         </div>
+      </div>
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Add-->
+<div class="modal fade" id="paneladd_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Add Panel</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row add_panel_form_div">
+               <form id="add_panel_form" action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm">
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <label for="usrname">Panel Name</label>
+                        <input type="text" required="" class="form-control" name="panel_name" id="panel_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="Panel Name">
+                     </div>
+                    
+                 </div>
+                
+               <div class="form-row">
+                  <div class="form-group col-md-12">
+                     <button type="submit" class="btn btn-primary">Add Panel</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!--Modal for Delete Candidate-->	
+<div class="modal fade" id="delete_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete interview candidate.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_candidates" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Candidate Add-->
+<div class="modal fade" id="candidateadd_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Add Candidate</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row add_candidate_form_div">
+               <form id="add_candidate_form" action="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm" enctype="multipart/form-data">
+                  <div class="form-row">
+                     <div class="form-group col-md-3">
+                        <label for="usrname">First Name</label>
+                        <input type="text" required="" class="form-control" name="cn_fname" id="cn_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="First Name">
+                     </div>
+                     <div class="form-group col-md-3">
+                        <label for="usrname">Last Name</label>
+                        <input type="text" class="form-control" pattern="[A-Za-z]{1,20}" name="cn_lname" id="cn_username" title="3 to 20 characters" placeholder="Last Name" required="">
+                     </div>
+                     <div class="form-group col-md-6">
+                        <label for="psw">Applied For</label>
+                         
+                        <select name="cn_applied_for" class="form-control" required="">
+                          <option value="">--Please Select--</option>
+                          
+                                 <option value="2">coldfusion</option>
+                              
+                                 <option value="5">Possimus ut quae quod </option>
+                              
+                                 <option value="6">In id vol</option>
+                              
+                                 <option value="7">Ldsdsds</option>
+                              
+                                 <option value="8">Quo similiqu</option>
+                              
+                                 <option value="9">Quo similiqu</option>
+                              
+                                 <option value="10">Quo similiqu</option>
+                              
+                                 <option value="11">Reiciendis expedi</option>
+                              
+                                 <option value="12">Ea vero sed</option>
+                              
+                                 <option value="13">Ea vero sed</option>
+                              
+                                 <option value="14">Ea vero sed</option>
+                              
+                                 <option value="15">Ea vero sed</option>
+                              
+                                 <option value="16">Ea vero sed</option>
+                              
+                                 <option value="17">Ea vero sed</option>
+                              
+                                 <option value="18">Ea vero sed</option>
+                              
+                                 <option value="19">Ea vero sed</option>
+                              
+                                 <option value="20">Ea vero sed</option>
+                              
+                                 <option value="21">Ea vero sed</option>
+                              
+                                 <option value="22">Aliqua Volu</option>
+                              
+                                 <option value="23">In dolor</option>
+                              
+                                 <option value="24">Sint laud</option>
+                              
+                                 <option value="25">Quia cupidatat</option>
+                              
+                                 <option value="26">Possimus</option>
+                              
+                                 <option value="27">Possimus</option>
+                              
+                       </select>
+
+                    </div>
+                 </div>
+                 <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="designation">Designation</label>
+                     
+                     <select class="form-control" name="cn_designation" required="">
+                        <option value="">--Please Select--</option>
+                          
+                                 <option value="1">TL_coldfusion</option>
+                              
+                     </select>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label for="con_number">Contact Number</label>
+                     <input type="tel" name="cn_contact_no" class="form-control" id="cn_contact_no" required="" pattern="^[0-9-+()]{3,15}" placeholder="Contact Number">
+                  </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="email">Email</label>
+                     <input type="email" required="" name="cn_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" class="form-control" id="cn_email" placeholder="Email">
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label for="experience">Experience</label>
+                     <input type="number" min="0" max="50" step="0.01" name="cn_experience" class="form-control" id="cn_experience" placeholder="Experience">
+                  </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="loc">Location</label>
+                     <input type="text" required="" pattern="[A-Za-z ,-+]{5,50}" name="cn_location" class="form-control" id="cn_location" placeholder="Location">
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label for="current_cmny">Current Company</label>
+                     <input type="text" pattern="[A-Za-z ]{5,39}" name="cn_current_company" class="form-control" id="cn_current_company" placeholder="Current Company">
+                  </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="current_ctc">Current Ctc</label>
+                     <input type="number" min="1000" max="1000000000" name="cn_current_ctc" class="form-control" id="cn_current_ctc" placeholder="Current Ctc">
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label for="expected_ctc">Expected Ctc</label>
+                     <input type="number" min="1000" max="1000000000" required="" name="cn_expected_ctc" class="form-control" id="cn_expected_ctc" placeholder="Expected Ctc">
+                  </div>
+               </div>
+               <div class="form-row">
+                  
+                  <div class="form-group col-md-6">
+                     <label for="notice Period">Resume Upload</label>
+                     <input type="file" accept="application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required="" name="cn_resume_upload" class="form-control" id="cn_resume_upload">
+                  </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-6">
+                     <label for="current_ctc">skills</label>
+                     
+                     <select class="form-control select2-hidden-accessible" name="cn_resume_skills" id="cn_resume_skills" multiple="" required="" tabindex="-1" aria-hidden="true">
+                        
+                                 <option value="1">html</option>
+                              
+                                 <option value="2">csss</option>
+                              
+                     </select><span class="select2 select2-container select2-container--default" dir="ltr" style="width: 100px;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1"><ul class="select2-selection__rendered"><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" role="textbox" aria-autocomplete="list" placeholder="Skills" style="width: 100px;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                  </div>
+                  <div class="form-group col-md-6">
+                     <label for="current_ctc">Notice Period(In Months)</label>
+                     <input type="number" min="0" max="60" required="" name="cn_notice_period" class="form-control" id="cn_notice_period">
+                  </div>
+               </div>
+               <div class="form-row">
+                  <div class="form-group col-md-12">
+                     <button type="submit" class="btn btn-primary">Add Candidate</button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!--Modal for View Candidate-->
+<div class="modal fade" id="viewcandidate_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">View Candidate</h4>
+         </div>
+         <div class="modal-body">
+            <div class="box-body form-horizontal" id="view_candidate_modal_div">
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For Candidate Edit-->
+<div class="modal fade" id="candidateedit_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Edit Candidate</h4>
+         </div>
+         <div class="modal-body" id="edit_candidate_modal">
+
+         </div>   
+        
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!--Modal for Schedule Interview -->
+<div class="modal fade" id="schedule_interview_modal" role="dialog">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h4 class="modal-title">Schedule Interview</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row">
+               <form id="add_schedulecandidate_form">
+                  <div class="form-row">
+                     <div class="form-group col-md-2">
+                        <label for="date">Date:</label>
+                     </div>
+                     <div class="form-group col-md-4">
+                        <input type="date" class="form-control" id="schedule_date">
+                     </div>
+                     <div class="form-group col-md-2">
+                        <label for="date">Time:</label>
+                     </div>
+                     <div class="form-group col-md-4">
+                        <input type="time" class="form-control" id="schedule_time">
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-3">
+                        <label for="inter_pan">Interview Panel:</label>
+                     </div>
+                     <div class="form-group col-md-6">
+                        <select multiple="" class="form-control" id="schedule_interview_panel">
+                           <option>karthick</option>
+                           <option>sumesh</option>
+                           <option>nagesh</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary">Schedule Candidate</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+      <div class="container-fluid">
+         <div class="row content">
+            <div class="responsive_bar"><i class="fa fa-bars"></i></div>
+<div id="navigation-app" class="col-xs-2 sidenav">
+	<div id="logo_navs">
+		<img alt="crm" src="./Job Vacancy_files/crm.png" class="img-responsive">
+		<div class="responsive_tag">
+			<i class="fa fa-arrow-left"></i>
+		</div>
+	</div>
+	<div id="logo_navs2">
+		<div class="dropdown">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+				admin admin<span class="glyphicon glyphicon-chevron-down"></span>
+			</button>
+			<div class="dropdown-menu">
+				
+					<a class="dropdown-item" href="http://localhost:8500/1interview/logout.cfm">Logout</a>
+								
+			</div>
+		</div>
+	</div>
+	<div id="nav_plate">
+		<nav class="navigation">
+			<ul class="nav nav-pills nav-stacked">
+				
+				<li><a href="http://localhost:8500/1interview/home.cfm">Candidate List</a></li>
+				<li><a href="http://localhost:8500/1interview/schedule_interview.html">Schedule Interview</a></li>
+				<li><a href="http://localhost:8500/1interview/panel/panel_members.cfm">Add Panel Member</a></li>
+				<li><a href="http://localhost:8500/1interview/add_custom.html">Add Custom</a></li>
+				<li><a href="http://localhost:8500/1interview/panel/panel_list.cfm">Panel Management </a></li>
+				<li><a href="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+            <section class="col-xs-12 col-md-10">
+               <header class="jumbotron">
+                  <h2>Job Vacancy</h2>
+               </header>
+               <div id="content_real">
+                  <div id="content_layout">
+                     <div class="top_tabelements row">
+                       
+                        <div class="col-lg-5">
+                           <div class="row">
+                              <div class="col-sm-6">
+                                 <div class="row">
+                                    <div class="job_vacancy_but col-xs-5">
+                                       <button type="button" class="btn btn-info">
+                                       <span class="glyphicon glyphicon-plus-sign"></span> Add
+                                       </button>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <main class="table">
+                        <div id="job_vacancy_table_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer"><div class="row"><div class="col-sm-6"><div class="dataTables_length" id="job_vacancy_table_length"><label>Show <select name="job_vacancy_table_length" aria-controls="job_vacancy_table" class="form-control input-sm"><option value="5">5</option><option value="10">10</option><option value="25">25</option><option value="50">50</option></select> entries</label></div></div><div class="col-sm-6"><div id="job_vacancy_table_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm" placeholder="" aria-controls="job_vacancy_table"></label></div></div></div><div class="row"><div class="col-sm-12"><table id="job_vacancy_table" class="table table-responsive dataTable no-footer" role="grid" aria-describedby="job_vacancy_table_info" style="width: 1094px;">
+                           
+                        <thead><tr role="row"><th class="job_vacancy_list_column sorting_asc" tabindex="0" aria-controls="job_vacancy_table" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Id: activate to sort column descending" style="width: 41px;">Id</th><th class="job_vacancy_list_column sorting" tabindex="0" aria-controls="job_vacancy_table" rowspan="1" colspan="1" aria-label="JobPosition: activate to sort column ascending" style="width: 307px;">JobPosition</th><th class="job_vacancy_list_column sorting" tabindex="0" aria-controls="job_vacancy_table" rowspan="1" colspan="1" aria-label="JobCode: activate to sort column ascending" style="width: 135px;">JobCode</th><th class="job_vacancy_list_column sorting" tabindex="0" aria-controls="job_vacancy_table" rowspan="1" colspan="1" aria-label="Vacancy: activate to sort column ascending" style="width: 129px;">Vacancy</th><th class="dt-head-center sorting_disabled" rowspan="1" colspan="1" aria-label="Action" style="width: 402px;">Action</th></tr></thead><tbody><tr class="odd"><td valign="top" colspan="5" class="dataTables_empty">No matching records found</td></tr></tbody></table><div id="job_vacancy_table_processing" class="dataTables_processing" style="display: none;">Processing...</div></div></div><div class="row"><div class="col-sm-5"><div class="dataTables_info" id="job_vacancy_table_info" role="status" aria-live="polite">Showing 0 to 0 of 0 entries (filtered from 24 total entries)</div></div><div class="col-sm-7"><div class="dataTables_paginate paging_simple_numbers" id="job_vacancy_table_paginate"><ul class="pagination"><li class="paginate_button previous disabled" id="job_vacancy_table_previous"><a href="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm#" aria-controls="job_vacancy_table" data-dt-idx="0" tabindex="0">Previous</a></li><li class="paginate_button next disabled" id="job_vacancy_table_next"><a href="http://localhost:8500/1interview/job_vacancy/job_vacancy_list.cfm#" aria-controls="job_vacancy_table" data-dt-idx="1" tabindex="0">Next</a></li></ul></div></div></div></div>
+                     </main>
+                     
+                  </div>
+               </div>
+            </section>
+         </div>
+      </div>
+      <input type="hidden" id="action_id">
+<input type="hidden" id="action_page">
+<script src="./Job Vacancy_files/jquery.min.js.download"></script>
+<script src="./Job Vacancy_files/bootstrap.min.js.download"></script>
+<script src="./Job Vacancy_files/select2.min.js.download"></script>	
+<script src="./Job Vacancy_files/jquery.dataTables.min.js.download"></script>	
+<script type="text/javascript" src="./Job Vacancy_files/jquery.dataTables.min.js.download"></script>
+<script type="text/javascript" src="./Job Vacancy_files/dataTables.bootstrap.min.js.download"></script>
+<script type="text/javascript" src="./Job Vacancy_files/jquery.dataTables.js.download"></script>
+<script src="./Job Vacancy_files/moment.min.js.download"></script>
+<script src="./Job Vacancy_files/bootstrap-datetimepicker.min.js.download"></script>
+<script src="./Job Vacancy_files/script.js.download"></script>
+ 
+   
+<div class="modal-backdrop fade in"></div></body></html>

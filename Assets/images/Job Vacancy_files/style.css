@@ -174,10 +174,6 @@ section{
 	color: #b70101b8;
 	font-size: 15px;
 }
-#selectinground_div .select2-container{
-   display: block;
-}
-
 @media screen and (max-width: 767px) {
   .sidenav {
     height: auto;

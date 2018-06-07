@@ -1,3 +1,93 @@
+<!-- Modal For selecting rounds-->
+<div class="modal fade" id="selectinground_modal" role="dialog">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <form id="selectinground_form" type="post">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Select Rounds</h4>
+         </div>
+         <div class="modal-body" id="selectinground_div">
+
+
+
+         </div>  
+         <div class="modal-footer">
+         <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Save</button>
+         </div>  
+      </div> 
+   </form >
+   </div>
+  </div>
+</div>
+<!-- Modal For Panel Members Add-->
+<div class="modal fade" id="job_vacancy_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Job Position</h4>
+         </div>
+         <form action="" id="form_job_vacancy">
+         <div class="modal-body row">
+            <div class="job_vacancy_div">
+                  <div class="form-row">
+                     <label class="control-label col-sm-2">Job Name</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{3,35}" title="3 to 35 characters" class="form-control" id="JobPosition"  required name="JobPosition" placeholder="Job Name">
+                     </div>
+                     <label class="control-label col-sm-2">Job Code</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" pattern=".{1,35}" required title="1 to 35 characters" class="form-control" id="JobCode"  name="JobCode" placeholder="Job Code">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">JobDescription</label>
+                     <div class="col-sm-4 form-group ">
+                        <textarea class="form-control" pattern=".{3,50}" required title="3 to 50 characters" id="JobDescription"  name="JobDescription">
+                        </textarea>
+                     </div>
+                     <label class="control-label col-sm-2">JobResponsibilty</label>
+                     <div class="col-sm-4 form-group ">
+                        <textarea class="form-control" pattern=".{3,50}" required title="3 to 50 characters" id="JobResponsibilty"  name="JobResponsibilty">
+                        </textarea>
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">StartDate</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text"    required  class="form-control" id="StartDate"  name="StartDate">
+                     </div>
+                     <label class="control-label col-sm-2">EndDate</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="text" class="form-control"   required id="EndDate"  name="EndDate">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Vacancy</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="number"   pattern=".{5,20}" required title="5 to 20 characters"  class="form-control" id="Vacancy"  name="Vacancy" placeholder="Vacancy">
+                     </div>
+                  </div>
+                  <div class="form-row ">
+                     <label class="control-label col-sm-2">Rounds</label>
+                     <div class="col-sm-4 form-group ">
+                        <input type="number"   min="1" max="5" required  class="form-control" id="Rounds"  name="rounds" placeholder="Rounds">
+                     </div>
+                  </div>
+   </div>
+      </div>
+      <div class="modal-footer">
+         <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Add Panel Member</button>
+         </div>  
+      </div>
+      </form>
+   </div>
+  </div>
+</div>
+
 <!-- Modal For Panel Members in Panels Add-->
 <div class="modal fade" id="membersinpanel_modal" role="dialog">
    <div class="modal-dialog modal-sm">
@@ -77,7 +167,7 @@
                   <div class="form-row">
                      <label class="control-label col-sm-2">First Name</label>
                      <div class="col-sm-4 form-group ">
-                        <input type="text" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="firstname"  name="firstname" placeholder="First Name">
+                        <input type="text" pattern="A-Za-z]{3,20}" title="3 to 20 characters" class="form-control" id="firstname"  name="firstname" placeholder="First Name">
                      </div>
                      <label class="control-label col-sm-2">Last Name</label>
                      <div class="col-sm-4 form-group ">
