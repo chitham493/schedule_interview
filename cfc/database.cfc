@@ -1,46 +1,44 @@
 <cfcomponent access="public" displayname="database">
-
 <cffunction access="remote" name="selectinground" returntype="any" returnFormat="json">   
-  <cfargument name="JobPosition" type="string" required="true">
-  <cfargument name="JobCode" type="string" required="true">
-  <cfargument name="JobDescription" type="string" required="true">
-  <cfargument name="JobResponsibilty" type="string" required="true">
-  <cfargument name="StartDate" type="string" required="true">
-  <cfargument name="EndDate" type="string" required="true">
-  <cfargument name="Vacancy" type="string" required="true">
+  <cfargument name="job_vacancy_id" type="string" required="true">
+  <cfargument name="job_rounds" type="string" required="true">
+  <cfargument name="interviewtypes1" type="string" required="true">
+  <cfargument name="interviewtypes_skills1" type="string" required="true">
+  <cfargument name="interviewtypes2" type="string" required="false">
+  <cfargument name="interviewtypes_skills2" type="string" required="false">
+  <cfargument name="interviewtypes3" type="string" required="false">
+  <cfargument name="interviewtypes_skills3" type="string" required="false">
+  <cfargument name="interviewtypes4" type="string" required="false">
+  <cfargument name="interviewtypes_skills4" type="string" required="false">
+  <cfargument name="interviewtypes5" type="string" required="false">
+  <cfargument name="interviewtypes_skills5" type="string" required="false">
   <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
-
-  <cfquery name="insertjob_vacancy" datasource="#application.datasource#" result="insertjob_vacancyrs">
-  insert into JobVacancy
-           (JobPosition
-           ,JobCode
-           ,JobDescription
-           ,JobResponsibilty
-           ,Vacancy
-           ,StartDate
-           ,EndDate
+  <cfset CountVar = 1>
+  
+  <!--- Loop until CountVar = 5. --->
+  <cfset condition_loop=LSParseNumber(arguments.job_rounds)+1>
+  <cfloop condition = "CountVar LESS THAN #condition_loop#"> 
+      <cfquery name="selectinground" datasource="#application.datasource#" result="selectingroundrsss">
+  
+      insert into InterviewRounds (JobId
+             ,InterviewTypeId,
+             Status,
+             round_order) values (
+             <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_vacancy_id#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments['interviewtypes#CountVar#']#" />,1,#CountVar#);
+      </cfquery>
+      <cfloop list="#arguments['interviewtypes_skills#CountVar#']#"  item="skill_id">
+        <cfquery name="selectingroundskills#CountVar#" datasource="#application.datasource#" result="selectingroundskillsrss#CountVar#">
+        insert into InterviewSkills (InterviewRoundId
+           ,SkillId
            ,CreatedDate
            ,ModifiedDate
-           ,CreatedBy
-           ,ModifiedBy
-           ,Status,rounds) values (
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobPosition#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobCode#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobDescription#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobResponsibilty#" />,      
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Vacancy#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.StartDate#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.EndDate#" />,
-    '#variables.todaydate#',
-    '#variables.todaydate#',
-    #session.user_session#,
-    #session.user_session#,
-    1,
-    <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.rounds#" />
-    )
-  </cfquery>
- 
-<cfoutput>#insertjob_vacancyrs["GENERATEDKEY"]#,#arguments.rounds#</cfoutput>
+           ,Status) values (
+             <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#selectingroundrsss.GENERATEDKEY#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#skill_id#" />,'#variables.todaydate#','#variables.todaydate#',1);
+      </cfquery>
+      </cfloop>
+      <cfset CountVar=CountVar+1>
+  </cfloop>
+<cfoutput>success</cfoutput>
 </cffunction>
   
 <cffunction access="remote" name="insertjob_vacancy" returntype="any" returnFormat="json">   
@@ -99,13 +97,17 @@
     <!--- Loop until CountVar = 5. --->
     <cfset  interviewtypes_list = interviewtypes_list()>
     <cfset  skills_list = skills_list()>
+    
      <cfoutput>
+      <input type="hidden" value="#arguments.job_vacancy_id#" name="job_vacancy_id" id="job_vacancy_id">
+      <input type="hidden" value="#arguments.job_rounds#" name="job_rounds" id="job_rounds">
+
     <cfloop condition = "CountVar LESS THAN #job_rounds#"> 
     <cfset CountVar = CountVar + 1> 
     <div class="row">
       <div class="form-group col-md-6">
     <label >Round #CountVar#</label >
-   <select  class="form-control interviewtypes" id="interviewtypes#CountVar#" required>
+   <select  class="form-control interviewtypes" name="interviewtypes#CountVar#" id="interviewtypes#CountVar#" required>
       <option value="">--Please Select--</option>
     <cfloop query="interviewtypes_list">
         <option  value="#InterviewTypeId#">#Name#</option>
@@ -114,7 +116,7 @@
  </div>
  <div class="form-group col-md-6">
     <label >Skills for Round #CountVar#</label >
-   <select  class="form-control" name="interviewtypes_skills" class="interviewtypes_skills" id="interviewtypes_skills#CountVar#" multiple required>
+   <select  class="form-control" name="interviewtypes_skills#CountVar#" class="interviewtypes_skills" id="interviewtypes_skills#CountVar#" multiple required>
       <cfoutput>
             <cfloop query="skills_list">
                <option value="#SkillId#">#Name#</option>

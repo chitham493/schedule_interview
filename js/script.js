@@ -39,9 +39,7 @@ $("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
     processData: false,
     success: function(result) {
       result=$.trim(result);
-          var result_array=result.split(',');
-       $('#job_vacancy_modal').modal('toggle');
-   
+      var result_array=result.split(',');
     }
   });
 
@@ -66,9 +64,6 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
         data:{job_vacancy_id:result_array[0],job_rounds:result_array[1]},
         success:function(response){
          $("#selectinground_div").html(response);
-          $("#interviewtypes_skills0").select2({
-           placeholder: "Skills"
-          });
           $("#interviewtypes_skills1").select2({
             placeholder: "Skills"
           });
@@ -79,6 +74,9 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
             placeholder: "Skills"
           });
           $("#interviewtypes_skills4").select2({
+           placeholder: "Skills"
+          });
+          $("#interviewtypes_skills5").select2({
            placeholder: "Skills"
           });
          $("#selectinground_modal").modal();
@@ -103,7 +101,7 @@ $(function () {
               alert("Already Assigned");
 
             }
-console.log(selectinground_modal_ar);
+
 
   });
 });
