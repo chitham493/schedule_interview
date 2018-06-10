@@ -22,9 +22,9 @@ $('#job_vacancy_table').DataTable( {
     'render': function (data, type, row) {
 
       return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_job_vacancy(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_job_vacancy(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"View\" class=\"icon_vox \" onclick=\"return view_job_vacancy(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">pageview<\/span><\/a>'
-   }
- }
- ]
+    }
+  }
+  ]
 } );
 
 $("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
@@ -56,33 +56,33 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
     processData: false,
     success: function(result) {
       result=$.trim(result);
-          var result_array=result.split(',');
-       $('#job_vacancy_modal').modal('toggle');
-       $.ajax({
+      var result_array=result.split(',');
+      $('#job_vacancy_modal').modal('toggle');
+      $.ajax({
         url:  domain+"cfc/database.cfc?method=selectinground_loop",
         type:"POST",
         data:{job_vacancy_id:result_array[0],job_rounds:result_array[1]},
         success:function(response){
          $("#selectinground_div").html(response);
-          $("#interviewtypes_skills1").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills2").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills3").select2({
-            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills4").select2({
+         $("#interviewtypes_skills1").select2({
+          placeholder: "Skills"
+        });
+         $("#interviewtypes_skills2").select2({
+          placeholder: "Skills"
+        });
+         $("#interviewtypes_skills3").select2({
+          placeholder: "Skills"
+        });
+         $("#interviewtypes_skills4").select2({
            placeholder: "Skills"
-          });
-          $("#interviewtypes_skills5").select2({
+         });
+         $("#interviewtypes_skills5").select2({
            placeholder: "Skills"
-          });
+         });
          $("#selectinground_modal").modal();
-          }
-        
-      });
+       }
+
+     });
     }
   });
 
@@ -90,17 +90,17 @@ $("#job_vacancy_modal").on("submit", "#form_job_vacancy", function(e) {
 $(function () {
   var selectinground_modal_ar=[0,0,0,0,0];
   $("#selectinground_modal").on("change", ".interviewtypes", function(e) {
-      var  value_interviewtypes=$(this).val();
+    var  value_interviewtypes=$(this).val();
 
-      if(jQuery.inArray(value_interviewtypes, selectinground_modal_ar) == -1){
+    if(jQuery.inArray(value_interviewtypes, selectinground_modal_ar) == -1){
       selectinground_modal_ar[$('.interviewtypes').index(this)]=value_interviewtypes;
 
-            }else{
-              $(this).val("");
-              selectinground_modal_ar[$('.interviewtypes').index(this)]="";
-              alert("Already Assigned");
+    }else{
+      $(this).val("");
+      selectinground_modal_ar[$('.interviewtypes').index(this)]="";
+      alert("Already Assigned");
 
-            }
+    }
 
 
   });
@@ -235,6 +235,12 @@ function addmembers_to(id){
       });
     }
   });
+
+}
+function schedule_candidate(id){
+  $("#schedule_interview_modal").modal();
+
+
 
 }
 $("#membersinpanel_modal").on("submit", "#membersinpanel", function(e) {
@@ -487,8 +493,14 @@ $(function(){
             data: null,
             class: "dt-head-center",
             'render': function (data, type, row) {
-
-             return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Scheduled\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>'
+              
+              if(typeof row[5]=='undefined'){
+                var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Scheduled\" onclick=\"return schedule_candidate(\''+row[0]+'\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
+              }else{
+                var schedule='onclick=\"return false\" class=\"icon_vox schedule_active\">';
+              }
+                var links='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n'+schedule;
+                  return links;
            }
          }
          ]
@@ -610,9 +622,6 @@ $(".responsive_tag").click(function() {
 $(".responsive_bar").click(function() {
   $("#navigation-app").fadeIn("slow");
 });
-function assignment(id){
-  $("#schedule_interview_modal").modal();
-}
 $("#cn_resume_skills").select2({
  placeholder: "Skills"
 });

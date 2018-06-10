@@ -2,6 +2,7 @@
     <cffunction name="dataTable" access="remote" format="json">
         <cfset sTableName = "CandidateDetails" />
         <cfset listColumns = "CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition" />
+        <cfset listColumns_query = "A.CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition" />
         <cfset sIndexColumn = "CandidateId" />
         <cfset coldfusionDatasource = "#application.datasource#"/>
         <cfparam name="url.sEcho" default="1" type="integer" />
@@ -21,11 +22,11 @@
 
         <!--- Data set after filtering --->
         <cfquery datasource="#coldfusionDatasource#" name="qFiltered" result="myResult">
-            SELECT #listColumns#
-                FROM #sTableName#  as A inner join JobVacancy as B on A.AppliedFor=B.JobVacancyId WHERE (A.Status=1) 
+           SELECT  Distinct #listColumns_query#,C.ScheduleId
+                FROM #sTableName# as A inner join JobVacancy as B  on A.AppliedFor=B.JobVacancyId left join Schedule as C on  A.CandidateId=C.CandidateId WHERE (A.Status=1) 
             <cfif len(trim(url.sSearch))>
             <cfset session.canlist_search_true="1">
-                 AND (<cfloop list="#listColumns#" index="thisColumn"><cfif thisColumn neq listFirst(listColumns)> OR </cfif>#thisColumn# LIKE <cfif thisColumn is "version"><!--- special case ---><cfqueryparam cfsqltype="CF_SQL_FLOAT" value="#val(url.sSearch)#" /><cfelse><cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="%#trim(url.sSearch)#%" /></cfif></cfloop>)
+                 AND (<cfloop list="#listColumns_query#" index="thisColumn"><cfif thisColumn neq listFirst(listColumns_query)> OR </cfif>#thisColumn# LIKE <cfif thisColumn is "version"><!--- special case ---><cfqueryparam cfsqltype="CF_SQL_FLOAT" value="#val(url.sSearch)#" /><cfelse><cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="%#trim(url.sSearch)#%" /></cfif></cfloop>)
                   <cfset list_paramenters=ListAppend(list_paramenters,"%#trim(url.sSearch)#%")>
                   <cfset list_columnlist_paramenters=ListAppend(list_paramenters,"")>
                   
@@ -59,7 +60,7 @@
                
 
             <cfif url.iSortingCols gt 0>
-                ORDER BY <cfloop from="0" to="#url.iSortingCols-1#" index="thisS"><cfif thisS is not 0>, </cfif>#listGetAt(listColumns,(url["iSortCol_"&thisS]+1))# <cfif listFindNoCase("asc,desc",url["sSortDir_"&thisS]) gt 0>#url["sSortDir_"&thisS]#</cfif> </cfloop>
+                ORDER BY <cfloop from="0" to="#url.iSortingCols-1#" index="thisS"><cfif thisS is not 0>, </cfif>#listGetAt(listColumns_query,(url["iSortCol_"&thisS]+1))# <cfif listFindNoCase("asc,desc",url["sSortDir_"&thisS]) gt 0>#url["sSortDir_"&thisS]#</cfif> </cfloop>
             </cfif>
         </cfquery>
         <cfset session.list_paramenters='#list_paramenters#'>
