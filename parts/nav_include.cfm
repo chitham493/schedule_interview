@@ -23,9 +23,9 @@
 			<ul  class="nav nav-pills nav-stacked">
 				<cfset variables.url_page="#listlast(cgi.script_name,"/")#">
 				<li <cfif variables.url_page eq "home.cfm"> class="active" </cfif> ><a href="<cfoutput>#application.domain_name#</cfoutput>home.cfm">Candidate List</a></li>
-				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>schedule_interview.html">Schedule Interview</a></li>
+				<!--- <li ><a href="<cfoutput>#application.domain_name#</cfoutput>schedule_interview.html">Schedule Interview</a></li> --->
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_members.cfm">Add Panel Member</a></li>
-				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>add_custom.html">Add Custom</a></li>
+				<!--- <li ><a href="<cfoutput>#application.domain_name#</cfoutput>add_custom.html">Add Custom</a></li> --->
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_list.cfm">Panel Management </a></li>
 				<li ><a href="<cfoutput>#application.domain_name#</cfoutput>job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a></li>
 			</ul>

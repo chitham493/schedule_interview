@@ -1,8 +1,8 @@
 <cfcomponent>
     <cffunction name="dataTable" access="remote" format="json">
         <cfset sTableName = "CandidateDetails" />
-        <cfset listColumns = "CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition" />
-        <cfset listColumns_query = "A.CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition" />
+        <cfset listColumns = "CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition,ScheduleId,AppliedFor" />
+        <cfset listColumns_query = "A.CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition,ScheduleId,AppliedFor" />
         <cfset sIndexColumn = "CandidateId" />
         <cfset coldfusionDatasource = "#application.datasource#"/>
         <cfparam name="url.sEcho" default="1" type="integer" />
@@ -22,7 +22,7 @@
 
         <!--- Data set after filtering --->
         <cfquery datasource="#coldfusionDatasource#" name="qFiltered" result="myResult">
-           SELECT  Distinct #listColumns_query#,C.ScheduleId
+           SELECT  Distinct #listColumns_query#
                 FROM #sTableName# as A inner join JobVacancy as B  on A.AppliedFor=B.JobVacancyId left join Schedule as C on  A.CandidateId=C.CandidateId WHERE (A.Status=1) 
             <cfif len(trim(url.sSearch))>
             <cfset session.canlist_search_true="1">

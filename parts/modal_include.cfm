@@ -1,4 +1,44 @@
 <!-- Modal For selecting rounds-->
+<div class="modal fade" id="selecting_skills_modal" role="dialog">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+         <form id="selecting_skills_form" type="post">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Select Skills</h4>
+         </div>
+         <div class="modal-body" id="selecting_skills_div">
+
+
+
+         </div>  
+         <div class="modal-footer">
+         <div class="form-group col-md-12">
+            <button type="submit" class="btn btn-primary">Save</button>
+         </div>  
+      </div> 
+   </form >
+   </div>
+  </div>
+</div>
+<!-- Modal For Candidate Edit-->
+<div class="modal fade" id="jobvacancyedit_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Job Vacancy</h4>
+         </div>
+         <div class="modal-body" id="jobvacancy_modal_div">
+
+         </div>   
+        
+      <div class="modal-footer">  
+      </div>
+   </div>
+  </div>
+</div>
+<!-- Modal For selecting rounds-->
 <div class="modal fade" id="selectinground_modal" role="dialog">
    <div class="modal-dialog modal-md">
       <div class="modal-content">
@@ -463,40 +503,8 @@
             <h4 class="modal-title">Schedule Interview</h4>
          </div>
          <div class="modal-body">
-            <div class="row" class="add_candidate_form_div">
-               <form id="add_schedulecandidate_form">
-                  <div class="form-row">
-                     <div class="form-group col-md-2">
-                        <label for="date">Date:</label>
-                     </div>
-                     <div class="form-group col-md-4">
-                        <input type="date" class="form-control" id="schedule_date" >
-                     </div>
-                     <div class="form-group col-md-2">
-                        <label for="date">Time:</label>
-                     </div>
-                     <div class="form-group col-md-4">
-                        <input type="time" class="form-control" id="schedule_time">
-                     </div>
-                  </div>
-                  <div class="form-row">
-                     <div class="form-group col-md-3">
-                        <label for="inter_pan">Interview Panel:</label>
-                     </div>
-                     <div class="form-group col-md-6">
-                        <select multiple class="form-control" id="schedule_interview_panel">
-                           <option>karthick</option>
-                           <option>sumesh</option>
-                           <option>nagesh</option>
-                        </select>
-                     </div>
-                  </div>
-                  <div class="form-row">
-                     <div class="form-group col-md-12">
-                        <button type="submit" class="btn btn-primary">Schedule Candidate</button>
-                     </div>
-                  </div>
-               </form>
+            <div class="row schedule_interview_form_div">
+               
             </div>
          </div>
       </div>

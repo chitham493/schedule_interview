@@ -21,11 +21,71 @@ $('#job_vacancy_table').DataTable( {
     class: "dt-head-center",
     'render': function (data, type, row) {
 
-      return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_job_vacancy(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_job_vacancy(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"View\" class=\"icon_vox \" onclick=\"return view_job_vacancy(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">pageview<\/span><\/a>'
+      return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_job_vacancy(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox \" onclick=\"return delete_job_vacancy(\''+row[0]+'\')\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>'
     }
   }
   ]
 } );
+
+$("#jobvacancyedit_modal").on("submit", "#form_edit_job_vacancy", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+    type: 'POST',
+    url: domain + "cfc/database.cfc?method=jobvacancyedit",
+    data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+    success: function(result) {
+      result=$.trim(result);
+      var result_array=result.split(',');
+      $("#jobvacancyedit_modal").modal('toggle');
+      $.ajax({
+        url:  domain+"cfc/database.cfc?method=selectinskills_loop",
+        type:"POST",
+        data:{job_vacancy_id:result_array[1],job_rounds:result_array[0]},
+        success:function(response){
+         $("#selecting_skills_div").html(response);
+         $(".interviewtypes_skills").select2({
+          placeholder: "Skills"
+        });
+         $("#selecting_skills_modal").modal();
+       }
+     });
+    }
+  });
+    });
+function edit_job_vacancy(job_id){
+ $.ajax({
+  url:  domain+"cfc/database.cfc?method=edit_job_vacancy",
+  type:"POST",
+  data:{job_id:parseInt(job_id)},
+  success:function(html){
+    $("#jobvacancy_modal_div").html(html);
+        $(function () {
+      $('#StartDate').datetimepicker({
+        format: 'DD/MM/YYYY'
+      });
+      $('#EndDate').datetimepicker({
+        useCurrent: false,
+        format: 'DD/MM/YYYY'
+      });
+      $("#StartDate").on("dp.change", function (e) {
+        $('#EndDate').data("DateTimePicker").minDate(e.date);
+      });
+      $("#EndDate").on("dp.change", function (e) {
+        $('#StartDate').data("DateTimePicker").maxDate(e.date);
+      });
+       $("#select_interview_type").select2({
+        placeholder: "Select Members"
+      });
+    });
+    $("#jobvacancyedit_modal").modal();
+  }
+});
+
+}
 
 $("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
   e.preventDefault();
@@ -40,6 +100,10 @@ $("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
     success: function(result) {
       result=$.trim(result);
       var result_array=result.split(',');
+      $(".modal-content").html("<div class='msg_header'><h3>Added Successfully!!!</h3></div>");
+        setTimeout(function() {
+      location.reload();
+      }, 3000);
     }
   });
 
@@ -237,12 +301,47 @@ function addmembers_to(id){
   });
 
 }
-function schedule_candidate(id){
+function schedule_candidate(id,job_id){
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=schedule_candidate_form",
+    type:"POST",
+   data:{candidate_id:id,job_id:job_id},
+    success:function(result){
+      result=$.trim(result);
+     $(".schedule_interview_form_div").html(result);
+      $('#schedule_date').datetimepicker({
+        minDate : moment(),
+        format: 'DD/MM/YYYY'
+      });
+      $('#schedule_time').datetimepicker({
+        minDate : moment(),
+        format: 'HH:mm',
+      });
+    }
+  });
   $("#schedule_interview_modal").modal();
-
-
-
 }
+$("#schedule_interview_modal").on("submit", "#add_schedulecandidate_form", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=panelmemberadd_form",
+    type:"POST",
+    data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+    success:function(result){
+      result=$.trim(result);
+      if (result == "success") {
+        $(".modal-content").html("<div class='msg_header'><h3>Scheduled Successfully!!!</h3></div>");
+        setTimeout(function() {
+          location.reload();
+        }, 3000);
+      }
+    }
+  });
+});
 $("#membersinpanel_modal").on("submit", "#membersinpanel", function(e) {
   e.preventDefault();
   var formData = new FormData(this);
@@ -493,11 +592,11 @@ $(function(){
             data: null,
             class: "dt-head-center",
             'render': function (data, type, row) {
-              
-              if(typeof row[5]=='undefined'){
-                var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Scheduled\" onclick=\"return schedule_candidate(\''+row[0]+'\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
+              console.log(data);
+              if(row[5]==''){
+                var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return schedule_candidate(\''+row[0]+'\',\''+row[6]+'\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
               }else{
-                var schedule='onclick=\"return false\" class=\"icon_vox schedule_active\">';
+                var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>';
               }
                 var links='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n'+schedule;
                   return links;
