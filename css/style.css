@@ -366,7 +366,7 @@ label[for=date],label[for=time] {
     padding: 38px;
 }
 .select2-selection{
-       display: block;
+    display: block;
     width: 245px;
     padding: 6px 12px;
     font-size: 14px;
@@ -377,4 +377,7 @@ label[for=date],label[for=time] {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
-    
+}
+.schedule_tabs_div{
+    margin-left: 3px !important;
+}    

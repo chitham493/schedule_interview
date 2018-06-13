@@ -9,7 +9,7 @@
                 <cfif variables.data_count gt 0>
         		<cfoutput query="login_query" >
         		 	<cfset session.user_session="#login_query.UserId#"/>
-                    <cfset session.user_name="#login_query.FirstName# #login_query.LastName#"/>
+                    <cfset session.user_name=Left("#login_query.FirstName# #login_query.LastName#",14) />
                     <cfset session.user_type="#login_query.RoleId#"/>
         		</cfoutput>                 
         		<cfoutput>Success</cfoutput>

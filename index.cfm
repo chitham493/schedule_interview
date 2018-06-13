@@ -7,9 +7,6 @@
    <body class="dev_login">
       <div class="login-page">
          <label class="error_disp error_disp_loggs"></label>
-         <cfif structKeyExists(session,"user_session") >
-            <cflocation url="home.cfm">
-         </cfif>
          <cfif structKeyExists(session,"error_login") >
             <label class="error_disp"><cfoutput>#session.error_login#</cfoutput></label>
             <cfset variable.error_logins=structDelete(session,"error_login")>
@@ -21,7 +18,7 @@
             <label class="error_disp error_disp_password"></label>
             <input type="password" placeholder="password"  name="passwords"  id="passwords" required>
             <input type="submit" id="login_button" value="Login">
-            <p class="message">Forget Password? <a href="#">Click Here</a></p>
+            <!--- <p class="message">Forget Password? <a href="#">Click Here</a></p> --->
          </form>
       </div>
       <cfinclude template="parts/footer_include.cfm">

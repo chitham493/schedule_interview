@@ -1,25 +1,56 @@
+<!--Modal for schedule_list_all-->   
+<div class="modal fade" id="review_candidate_user_modal" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">View Schedule</h4>
+         </div>
+         <div class="modal-body">
+            <div class="modal-content review_candidate_form_div ">
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!--Modal for Delete panelMember 2-->   
+<div class="modal fade" id="delete_modal_job_vacancy" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete Job Vacancy.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_job_vacancy" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
 <!-- Modal For selecting rounds-->
 <div class="modal fade" id="selecting_skills_modal" role="dialog">
    <div class="modal-dialog modal-md">
       <div class="modal-content">
          <form id="selecting_skills_form" type="post">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Select Skills</h4>
-         </div>
-         <div class="modal-body" id="selecting_skills_div">
-
-
-
-         </div>  
-         <div class="modal-footer">
-         <div class="form-group col-md-12">
-            <button type="submit" class="btn btn-primary">Save</button>
-         </div>  
-      </div> 
-   </form >
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Select Skills</h4>
+            </div>
+            <div class="modal-body" id="selecting_skills_div">
+            </div>  
+            <div class="modal-footer">
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Save</button>
+               </div>  
+            </div> 
+         </form >
+      </div>
    </div>
-  </div>
 </div>
 <!-- Modal For Candidate Edit-->
 <div class="modal fade" id="jobvacancyedit_modal" role="dialog">
@@ -32,34 +63,34 @@
          <div class="modal-body" id="jobvacancy_modal_div">
 
          </div>   
-        
-      <div class="modal-footer">  
+
+         <div class="modal-footer">  
+         </div>
       </div>
    </div>
-  </div>
 </div>
 <!-- Modal For selecting rounds-->
 <div class="modal fade" id="selectinground_modal" role="dialog">
    <div class="modal-dialog modal-md">
       <div class="modal-content">
          <form id="selectinground_form" type="post">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Select Rounds</h4>
-         </div>
-         <div class="modal-body" id="selectinground_div">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Select Rounds</h4>
+            </div>
+            <div class="modal-body" id="selectinground_div">
 
 
 
-         </div>  
-         <div class="modal-footer">
-         <div class="form-group col-md-12">
-            <button type="submit" class="btn btn-primary">Save</button>
-         </div>  
-      </div> 
-   </form >
+            </div>  
+            <div class="modal-footer">
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Save</button>
+               </div>  
+            </div> 
+         </form >
+      </div>
    </div>
-  </div>
 </div>
 <!-- Modal For Panel Members Add-->
 <div class="modal fade" id="job_vacancy_modal" role="dialog">
@@ -70,8 +101,8 @@
             <h4 class="modal-title">Add Job Position</h4>
          </div>
          <form action="" id="form_job_vacancy">
-         <div class="modal-body row">
-            <div class="job_vacancy_div">
+            <div class="modal-body row">
+               <div class="job_vacancy_div">
                   <div class="form-row">
                      <label class="control-label col-sm-2">Job Name</label>
                      <div class="col-sm-4 form-group ">
@@ -116,16 +147,16 @@
                         <input type="number"   min="1" max="5" required  class="form-control" id="Rounds"  name="rounds" placeholder="Rounds">
                      </div>
                   </div>
-   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Add Panel Member</button>
+               </div>  
+            </div>
+         </form>
       </div>
-      <div class="modal-footer">
-         <div class="form-group col-md-12">
-            <button type="submit" class="btn btn-primary">Add Panel Member</button>
-         </div>  
-      </div>
-      </form>
    </div>
-  </div>
 </div>
 
 <!-- Modal For Panel Members in Panels Add-->
@@ -137,20 +168,20 @@
             <h4 class="modal-title">Members in Panel</h4>
          </div>
          <form action="" id="membersinpanel" method="post">
-         <div class="modal-body row">
-            <div class="add_memberinpanel_div">
-               
-              
+            <div class="modal-body row">
+               <div class="add_memberinpanel_div">
+
+
+               </div>
             </div>
-         </div>
-      <div class="modal-footer">
-      <div class="form-group col-md-12">
-                           <button type="submit" class="btn btn-primary">Save</button>
-                        </div>  
+            <div class="modal-footer">
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Save</button>
+               </div>  
+            </div>
+         </form>
       </div>
-      </form>
    </div>
-  </div>
 </div>
 <!--Modal for Delete panelMember -->   
 <div class="modal fade" id="delete_modal_panelmember" role="dialog">
@@ -175,12 +206,12 @@
       <div class="modal-content">
          <form action="" id="form_editmembers">
             <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Edit Panel Member</h4>
-               </div>
-               <div class="modal-body">
-                  <div class="row edit_panelmember_form_div">
-                     
+               <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Edit Panel Member</h4>
+            </div>
+            <div class="modal-body">
+               <div class="row edit_panelmember_form_div">
+
                </div>
             </div>
             <div class="modal-footer">  
@@ -190,8 +221,8 @@
             </div>
          </form>   
          
+      </div>
    </div>
-  </div>
 </div>
 <!-- Modal For Panel Members Add-->
 <div class="modal fade" id="panelmemberadd_modal" role="dialog">
@@ -202,8 +233,8 @@
             <h4 class="modal-title">Add Panel Members</h4>
          </div>
          <form action="" id="form_addmembers">
-         <div class="modal-body row">
-            <div class="add_panelmember_div">
+            <div class="modal-body row">
+               <div class="add_panelmember_div">
                   <div class="form-row">
                      <label class="control-label col-sm-2">First Name</label>
                      <div class="col-sm-4 form-group ">
@@ -240,24 +271,24 @@
                         <cfset  designation_list = database.designation_list()>
                         <select  class="form-control" name="designation" required>
                            <option value="">--Please Select--</option>
-                             <cfoutput>
-                                 <cfloop query="designation_list">
-                                    <option value="#DesignationId#">#Name#</option>
-                                 </cfloop>
-                             </cfoutput>
+                           <cfoutput>
+                              <cfloop query="designation_list">
+                                 <option value="#DesignationId#">#Name#</option>
+                              </cfloop>
+                           </cfoutput>
                         </select>
                      </div>
                   </div>
-   </div>
+               </div>
+            </div>
+            <div class="modal-footer">
+               <div class="form-group col-md-12">
+                  <button type="submit" class="btn btn-primary">Add Panel Member</button>
+               </div>  
+            </div>
+         </form>
       </div>
-      <div class="modal-footer">
-      <div class="form-group col-md-12">
-                           <button type="submit" class="btn btn-primary">Add Panel Member</button>
-                        </div>  
-      </div>
-      </form>
    </div>
-  </div>
 </div>
 <!--Modal for Delete panel -->   
 <div class="modal fade" id="delete_modal_panel" role="dialog">
@@ -286,13 +317,13 @@
          </div>
          <div class="modal-body">
             <div class="row edit_panel_form_div">
-               
+
+            </div>
+         </div>
+         <div class="modal-footer">  
          </div>
       </div>
-      <div class="modal-footer">  
-      </div>
    </div>
-  </div>
 </div>
 <!-- Modal For Panel Add-->
 <div class="modal fade" id="paneladd_modal" role="dialog">
@@ -310,21 +341,21 @@
                         <label for="usrname">Panel Name</label>
                         <input type="text" required class="form-control" name="panel_name" id="panel_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="Panel Name">
                      </div>
-                    
-                 </div>
-                
-               <div class="form-row">
-                  <div class="form-group col-md-12">
-                     <button type="submit" class="btn btn-primary">Add Panel</button>
+
                   </div>
-               </div>
-            </form>
+
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary">Add Panel</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+         <div class="modal-footer">  
          </div>
       </div>
-      <div class="modal-footer">  
-      </div>
    </div>
-  </div>
 </div>
 <!--Modal for Delete Candidate-->	
 <div class="modal fade" id="delete_modal" role="dialog">
@@ -365,29 +396,29 @@
                      </div>
                      <div class="form-group col-md-6">
                         <label for="psw">Applied For</label>
-                         <cfset  applied_for = database.applied_for()>
+                        <cfset  applied_for = database.applied_for()>
                         <select  name="cn_applied_for" class="form-control" required>
-                          <option value="">--Please Select--</option>
-                          <cfoutput>
-                              <cfloop query="applied_for">
-                                 <option value="#JobVacancyId#">#JobPosition#</option>
-                              </cfloop>
-                          </cfoutput>
-                       </select>
+                         <option value="">--Please Select--</option>
+                         <cfoutput>
+                           <cfloop query="applied_for">
+                              <option value="#JobVacancyId#">#JobPosition#</option>
+                           </cfloop>
+                        </cfoutput>
+                     </select>
 
-                    </div>
-                 </div>
-                 <div class="form-row">
+                  </div>
+               </div>
+               <div class="form-row">
                   <div class="form-group col-md-6">
                      <label for="designation">Designation</label>
                      <cfset  designation_list = database.designation_list()>
                      <select  class="form-control" name="cn_designation" required>
                         <option value="">--Please Select--</option>
-                          <cfoutput>
-                              <cfloop query="designation_list">
-                                 <option value="#DesignationId#">#Name#</option>
-                              </cfloop>
-                          </cfoutput>
+                        <cfoutput>
+                           <cfloop query="designation_list">
+                              <option value="#DesignationId#">#Name#</option>
+                           </cfloop>
+                        </cfoutput>
                      </select>
                   </div>
                   <div class="form-group col-md-6">
@@ -426,7 +457,7 @@
                   </div>
                </div>
                <div class="form-row">
-                  
+
                   <div class="form-group col-md-6">
                      <label for="notice Period">Resume Upload</label>
                      <input type="file" accept="application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required name="cn_resume_upload" class="form-control" id="cn_resume_upload">
@@ -438,10 +469,10 @@
                      <cfset  skills_list = database.skills_list()>
                      <select  class="form-control" name="cn_resume_skills" id="cn_resume_skills" multiple required>
                         <cfoutput>
-                              <cfloop query="skills_list">
-                                 <option value="#SkillId#">#Name#</option>
-                              </cfloop>
-                          </cfoutput>
+                           <cfloop query="skills_list">
+                              <option value="#SkillId#">#Name#</option>
+                           </cfloop>
+                        </cfoutput>
                      </select>
                   </div>
                   <div class="form-group col-md-6">
@@ -460,7 +491,7 @@
       <div class="modal-footer">  
       </div>
    </div>
-  </div>
+</div>
 </div>
 <!--Modal for View Candidate-->
 <div class="modal fade" id="viewcandidate_modal" role="dialog">
@@ -488,11 +519,11 @@
          <div class="modal-body" id="edit_candidate_modal">
 
          </div>   
-        
-      <div class="modal-footer">  
+
+         <div class="modal-footer">  
+         </div>
       </div>
    </div>
-  </div>
 </div>
 <!--Modal for Schedule Interview -->
 <div class="modal fade" id="schedule_interview_modal" role="dialog">
@@ -504,8 +535,21 @@
          </div>
          <div class="modal-body">
             <div class="row schedule_interview_form_div">
-               
-            </div>
+
+  <div class="form-row">
+   
+ 
+<div class="form-row">
+ <div class="form-group col-md-4">
+  <label for="inter_pan"><h3>Round1: Aptitude</h3></label>
+</div>
+      <div class="form-group col-md-6">
+         <h3>Rahul's Review</h3>
+      </div>
+  </div>
+
+
+      </div>
          </div>
       </div>
    </div>

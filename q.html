@@ -1,23 +1,59 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>jQuery UI Datepicker - Default functionality</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
-</head>
-<body>
- 
-<p>Date: <input type="text" id="datepicker"></p>
- 
- 
-</body>
-</html>
+<div id="ModalCandidateReview" class="modal fade" role="dialog" data-backdrop="static">
+	<div class="overlay-wrapper modal-dialog modal-md">
+		<div class="hide overlay">
+			<i class="fa fa-refresh fa-spin"></i>
+		</div>
+		<div class="modal-content">
+			<form class="form-horizontal" action="" method="post" name="CandidateReview" id="CandidateReview">				<input type="hidden" id="CandidateId" name="CandidateId">
+			<input type="hidden" id="ScheduleId" name="ScheduleId">
+			<input type="hidden" id="JobVacancyId" name="JobVacancyId">
+			<input type="hidden" id="ReviewId" name="ReviewId">										
+			<div class="modal-header box box-success">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title text-bold">Review</h3>
+				</div>
+				<div class="modal-body">
+					<div class="box box-solid box-default">
+						<div class="box-header with-border">
+							<h4 class="box-title">Details</h4>								
+						</div>
+						<div class="box-body">	
+							<div class="alert alert-warning" id="errorMsgs"></div>												
+							<div class="form-group">														
+								<label class="control-label col-sm-4">Job Position</label>
+								<div class="col-sm-7">																								
+									<input type="text" class="form-control" id="JobPosition"  name="JobPosition" disabled>						
+								</div>
+							</div>	
+							<div class="form-group">
+								<label class="control-label col-sm-4">Preferred Skills</label>
+								<div class="col-sm-7">	
+									<div class="well" id="ReviewSkills">												
+									</div>	
+								</div>	
+							</div>
+							<div class="form-group">														
+								<label class="control-label col-sm-4">Comments</label>
+								<div class="col-sm-7">
+									 <textarea class="form-control rounded-0" id="Comments" name="Comments" rows="5"></textarea>																													
+								</div>
+							</div>	
+							<div class="form-group">														
+								<label class="control-label col-sm-4">Result</label>
+								<div class="col-sm-8">
+									<div class="col-sm-4"><input type="radio" id="Result" name="Result" value="1"> &nbsp Eligible</div> 
+									<div class="col-sm-4"><input type="radio" id="Result" name="Result"  value="2"> &nbsp Onhold</div>
+									<div class="col-sm-4"><input type="radio" id="Result" name="Result"  value="3"> &nbsp Reject</div> 														
+								</div>
+							</div>
+						</div>							
+					</div>								
+				</div>
+				<div class="modal-footer">					
+					<input type="submit" class="btn btn-primary" value="Save" id="AddReview" >
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>	

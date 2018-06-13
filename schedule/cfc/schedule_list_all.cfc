@@ -1,9 +1,9 @@
 <cfcomponent>
     <cffunction name="dataTable" access="remote" format="json">
-        <cfset sTableName = "CandidateDetails" />
-        <cfset listColumns = "CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition,ScheduleId,AppliedFor" />
-        <cfset listColumns_query = "ScheduleId,A.CandidateId,FIRSTNAME,EMAIL,EXPERIENCE,JobPosition,AppliedFor" />
-        <cfset sIndexColumn = "CandidateId" />
+        <cfset sTableName = "Schedule" />
+        <cfset listColumns = "ScheduleId,FIRSTNAME,ScheduleDate,ScheduleTime,JobPosition,Name,AppliedFor,JobVacancyId,next_schdule_status,Final_Round,Current_Status,CandidateId" />
+        <cfset listColumns_query = "S.ScheduleId,C.CandidateId,C.FIRSTNAME,S.ScheduleDate,S.ScheduleTime,J.JobPosition,J.JobVacancyId,C.AppliedFor,S.Final_Round,IT.Name,S.next_schdule_status,S.Current_Status" />
+        <cfset sIndexColumn = "C.CandidateId" />
         <cfset coldfusionDatasource = "#application.datasource#"/>
         <cfparam name="url.sEcho" default="1" type="integer" />
         <cfparam name="url.iDisplayStart" default="0" type="integer" />
@@ -19,11 +19,11 @@
         <cfset list_columnlist_paramenters="">
         <cfset session.canlist_search_true="0">
         <cfset session.listColumns=variables.listColumns_query>
-
         <!--- Data set after filtering --->
         <cfquery datasource="#coldfusionDatasource#" name="qFiltered" result="myResult">
            SELECT  Distinct #listColumns_query#
-                FROM #sTableName# as A inner join JobVacancy as B  on A.AppliedFor=B.JobVacancyId left join Schedule as C on  A.CandidateId=C.CandidateId WHERE (A.Status=1) 
+                FROM #sTableName# S inner join InterviewRounds R on R.InterviewRoundId = S.InterviewRoundId inner join JobVacancy J 
+            on J.JobVacancyId = R.JobId inner join CandidateDetails C on C.CandidateId = S.CandidateId inner join InterviewTypes IT on R.InterviewTypeId = IT.InterviewTypeId  left join Review Rw on R.InterviewTypeId = IT.InterviewTypeId where S.Status = 1 
             <cfif len(trim(url.sSearch))>
             <cfset session.canlist_search_true="1">
                  AND (<cfloop list="#listColumns_query#" index="thisColumn"><cfif thisColumn neq listFirst(listColumns_query)> OR </cfif>#thisColumn# LIKE <cfif thisColumn is "version"><!--- special case ---><cfqueryparam cfsqltype="CF_SQL_FLOAT" value="#val(url.sSearch)#" /><cfelse><cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="%#trim(url.sSearch)#%" /></cfif></cfloop>)
@@ -61,6 +61,7 @@
 
             <cfif url.iSortingCols gt 0>
                 ORDER BY <cfloop from="0" to="#url.iSortingCols-1#" index="thisS"><cfif thisS is not 0>, </cfif>#listGetAt(listColumns_query,(url["iSortCol_"&thisS]+1))# <cfif listFindNoCase("asc,desc",url["sSortDir_"&thisS]) gt 0>#url["sSortDir_"&thisS]#</cfif> </cfloop>
+                <cfelse>
             </cfif>
         </cfquery>
         <cfset session.list_paramenters='#list_paramenters#'>
@@ -68,12 +69,9 @@
         <!--- Total data set length --->
         <cfquery datasource="#coldfusionDatasource#" name="qCount">
             SELECT COUNT(#sIndexColumn#) as total
-            FROM   #sTableName# as A inner join JobVacancy as B on A.AppliedFor=B.JobVacancyId  WHERE (A.Status=1) 
+            FROM   #sTableName# S inner join InterviewRounds R on R.InterviewRoundId = S.InterviewRoundId inner join JobVacancy J 
+            on J.JobVacancyId = R.JobId inner join CandidateDetails C on C.CandidateId = S.CandidateId where S.Status = 1
         </cfquery>
-          
-        <!---
-            Output
-         --->
         <cfcontent reset="Yes" />
         {"sEcho": <cfoutput>#val(url.sEcho)#</cfoutput>,
         "iTotalRecords": <cfoutput>#qCount.total#</cfoutput>,

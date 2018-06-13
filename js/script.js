@@ -1,3 +1,155 @@
+$('#table_schedule_all').DataTable( {
+  "bProcessing": true,
+  "bServerSide": true,
+  "responsive": true,
+  "sAjaxSource": domain +'schedule/cfc/schedule_list_all.cfc?method=dataTable',
+  "lengthMenu": [[5,10, 25, 50], [5,10, 25, 50]],
+  "rowReorder": {
+    selector: 'td:nth-child(2)'
+  },
+  columns:
+  [  
+
+  { title:'Id',name:"CandidateId",class: "candidate_column0" },
+  { title:'Name',name:"FIRSTNAME",class: "candidate_column1" },
+  { title:'Schdeule Date',name:"ScheduleDate" ,class: "candidate_column2"},
+  { title:'Schdeule Time',name:"ScheduleTime",class: "candidate_column3" },
+  { title:'Post Applied',name:"JobPosition",class: "candidate_column4" },
+  { title:'Interview Round',name:"Name",class: "candidate_column4" },
+  {
+    title: "Action",
+    orderable: false,
+    data: null,
+    class: "dt-head-center",
+    'render': function (data, type, row) {
+                //row[8]     next_schdule_status
+                //row[9]  Final_Round
+                if((row[8]==0)&&(row[9]==0)&&(row[10]==2)){
+                  var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return schedule_candidate(\''+row[0]+'\',\''+row[7]+'\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
+                }else{
+                  var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>';
+                }
+                return  schedule+'<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\" onclick=\"return view_schedule(\''+row[0]+',\''+row[11]+'\')\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n';
+              } }]
+
+            } );
+function view_schedule(schedule_id){
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=view_schedule_user",
+    type:"POST",
+    data:{schedule_id:schedule_id},
+    success:function(result){
+      result=$.trim(result);
+      $("#review_candidate_form_div").html(result);
+    }
+  });
+  $("#review_candidate_user_modal").modal();
+}
+function review_candidate(schedule_id,round_id){
+  $.ajax({
+    url:  domain+"login_panel/cfc/db2_database.cfc?method=review_candidate_user",
+    type:"POST",
+    data:{schedule_id:schedule_id,round_id:round_id},
+    success:function(result){
+      result=$.trim(result);
+      $(".review_candidate_form_div").html(result);
+    }
+  });
+  $("#review_candidate_user_modal").modal();
+
+}
+$("#review_candidate_user_modal").on("submit", "#review_candidate_user_form", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+    type: 'POST',
+    url:  domain+"login_panel/cfc/db2_database.cfc?method=review_candidate_user_submit",
+    data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+    success: function(result) {
+      result=$.trim(result);
+      $(".modal-content").html("<center><div class='msg_header'><h3>Review Submited Successfully!!!</h3></div></center>");
+      setTimeout(function() {
+        location.reload();
+      }, 3000);
+    }
+  });
+
+});
+$('#table_lay_selected').DataTable( {
+  "bProcessing": true,
+  "bServerSide": true,
+  "responsive": true,
+  "sAjaxSource": domain +'login_panel/cfc/schedule_list.cfc?method=dataTable',
+  "lengthMenu": [[5,10, 25, 50], [5,10, 25, 50]],
+  "rowReorder": {
+    selector: 'td:nth-child(2)'
+  },
+  columns:
+  [  
+
+  { title:'Id',name:"CandidateId",class: "candidate_column0" },
+  { title:'Name',name:"FIRSTNAME",class: "candidate_column1" },
+  { title:'Email',name:"Interview Type" ,class: "candidate_column2"},
+  { title:'Experience',name:"EXPERIENCE",class: "candidate_column3" },
+  { title:'Post Applied',name:"JobPosition",class: "candidate_column4" },
+  {
+    title: "Action",
+    orderable: false,
+    data: null,
+    class: "dt-head-center",
+    'render': function (data, type, row) {
+              //console.log(data);
+              var review='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Review\" onclick=\"return review_candidate(\''+row[5]+'\',\''+row[7]+'\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
+              return review;
+            }
+          }
+          ]
+        } );
+function schedule_candidate(id,job_id){
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=schedule_candidate_form",
+    type:"POST",
+    data:{candidate_id:id,job_id:job_id},
+    success:function(result){
+      result=$.trim(result);
+      $(".schedule_interview_form_div").html(result);
+      $('#schedule_date').datetimepicker({
+        minDate : moment(),
+        format: 'DD/MM/YYYY'
+      });
+      $('#schedule_time').datetimepicker({
+        minDate : moment(),
+        format: 'HH:mm',
+      });
+    }
+  });
+  $("#schedule_interview_modal").modal();
+}
+$("#schedule_interview_modal").on("submit", "#add_schedulecandidate_form", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=add_schedulecandidate_form",
+    type:"POST",
+    data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+    success:function(result){
+      result=$.trim(result);
+      if (result == "success") {
+        $(".modal-content").html("<div class='msg_header'><h3>Scheduled Successfully!!!</h3></div>");
+        setTimeout(function() {
+          location.reload();
+        }, 3000);
+      }
+    }
+  });
+});
 $('#job_vacancy_table').DataTable( {
   "bProcessing": true,
   "bServerSide": true,
@@ -26,7 +178,23 @@ $('#job_vacancy_table').DataTable( {
   }
   ]
 } );
+$("#selecting_skills_modal").on("submit", "#selecting_skills_form", function(e) {
+ e.preventDefault();
+ var formData = new FormData(this);
+ $.ajax({
+  type: 'POST',
+  url: domain + "cfc/database.cfc?method=selecting_skills_form_db",
+  data:formData,
+  cache:false,
+  contentType: false,
+  processData: false,
+  success: function(result) {
+    location.reload();
+  }
+});
 
+
+});
 $("#jobvacancyedit_modal").on("submit", "#form_edit_job_vacancy", function(e) {
   e.preventDefault();
   var formData = new FormData(this);
@@ -47,7 +215,7 @@ $("#jobvacancyedit_modal").on("submit", "#form_edit_job_vacancy", function(e) {
         data:{job_vacancy_id:result_array[1],job_rounds:result_array[0]},
         success:function(response){
          $("#selecting_skills_div").html(response);
-         $(".interviewtypes_skills").select2({
+         $(".interviewtypes_skills2").select2({
           placeholder: "Skills"
         });
          $("#selecting_skills_modal").modal();
@@ -55,7 +223,32 @@ $("#jobvacancyedit_modal").on("submit", "#form_edit_job_vacancy", function(e) {
      });
     }
   });
-    });
+});
+function delete_job_vacancy(id){
+  $("#delete_modal_job_vacancy").modal();
+  $("#action_id").val(id);
+  $("#action_page").val("delete_job_vacancy");
+}
+$("#delete_modal_job_vacancy").on("click", "#confirm_delete_job_vacancy", function(e) {
+  var action_page=$("#action_page").val();
+  var action_id=$("#action_id").val();
+  if(action_page=='delete_job_vacancy') {
+    job_vacancy_list_delete(action_id);
+  }
+
+});
+function job_vacancy_list_delete(action_id){
+  $.ajax({
+    url:  domain+"cfc/database.cfc?method=job_vacancy_list_delete",
+    type:"POST",
+    data:{action_id:parseInt(action_id)},
+    success:function(html){
+      alert("Success");
+      location.reload();
+
+    }
+  }); 
+}
 function edit_job_vacancy(job_id){
  $.ajax({
   url:  domain+"cfc/database.cfc?method=edit_job_vacancy",
@@ -63,7 +256,7 @@ function edit_job_vacancy(job_id){
   data:{job_id:parseInt(job_id)},
   success:function(html){
     $("#jobvacancy_modal_div").html(html);
-        $(function () {
+    $(function () {
       $('#StartDate').datetimepicker({
         format: 'DD/MM/YYYY'
       });
@@ -77,7 +270,7 @@ function edit_job_vacancy(job_id){
       $("#EndDate").on("dp.change", function (e) {
         $('#StartDate').data("DateTimePicker").maxDate(e.date);
       });
-       $("#select_interview_type").select2({
+      $("#select_interview_type").select2({
         placeholder: "Select Members"
       });
     });
@@ -101,8 +294,8 @@ $("#selectinground_modal").on("submit", "#selectinground_form", function(e) {
       result=$.trim(result);
       var result_array=result.split(',');
       $(".modal-content").html("<div class='msg_header'><h3>Added Successfully!!!</h3></div>");
-        setTimeout(function() {
-      location.reload();
+      setTimeout(function() {
+        location.reload();
       }, 3000);
     }
   });
@@ -301,47 +494,6 @@ function addmembers_to(id){
   });
 
 }
-function schedule_candidate(id,job_id){
-  $.ajax({
-    url:  domain+"cfc/database.cfc?method=schedule_candidate_form",
-    type:"POST",
-   data:{candidate_id:id,job_id:job_id},
-    success:function(result){
-      result=$.trim(result);
-     $(".schedule_interview_form_div").html(result);
-      $('#schedule_date').datetimepicker({
-        minDate : moment(),
-        format: 'DD/MM/YYYY'
-      });
-      $('#schedule_time').datetimepicker({
-        minDate : moment(),
-        format: 'HH:mm',
-      });
-    }
-  });
-  $("#schedule_interview_modal").modal();
-}
-$("#schedule_interview_modal").on("submit", "#add_schedulecandidate_form", function(e) {
-  e.preventDefault();
-  var formData = new FormData(this);
-  $.ajax({
-    url:  domain+"cfc/database.cfc?method=panelmemberadd_form",
-    type:"POST",
-    data:formData,
-    cache:false,
-    contentType: false,
-    processData: false,
-    success:function(result){
-      result=$.trim(result);
-      if (result == "success") {
-        $(".modal-content").html("<div class='msg_header'><h3>Scheduled Successfully!!!</h3></div>");
-        setTimeout(function() {
-          location.reload();
-        }, 3000);
-      }
-    }
-  });
-});
 $("#membersinpanel_modal").on("submit", "#membersinpanel", function(e) {
   e.preventDefault();
   var formData = new FormData(this);
@@ -598,12 +750,12 @@ $(function(){
               }else{
                 var schedule='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>';
               }
-                var links='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n'+schedule;
-                  return links;
-           }
-         }
-         ]
-       });
+              var links='<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_candidate(\''+row[0]+'\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"'+row[0]+'\" ><span class=\"material-icons\">delete<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"'+row[0]+'\" title=\"View\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n'+schedule;
+              return links;
+            }
+          }
+          ]
+        });
 }
 },
 ROUTINES: {
@@ -715,6 +867,22 @@ function edit_candidate(id){
     }
   });
 }
+//
+$("#edit_candidate_modal").on("submit", "#edit_candidate_form", function(e) {
+  e.preventDefault();
+  var formData = new FormData(this);
+  $.ajax({
+    type: 'POST',
+    url: domain + "cfc/database.cfc?method=UpdateCandidate_form",
+    data:formData,
+    cache:false,
+    contentType: false,
+    processData: false,
+    success: function(result) {
+
+    }
+  });
+});
 $(".responsive_tag").click(function() {
   $("#navigation-app").fadeOut("slow");
 }); 
@@ -732,6 +900,7 @@ $(".form_dev").submit(function(e){
     type:"POST",
     success:function(html){
       if($.trim(html)=='Success'){
+
         window.location.href = domain+"home.cfm";
       }else{
         $(".error_disp_loggs").html('invalid Login');

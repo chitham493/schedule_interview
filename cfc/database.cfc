@@ -1,61 +1,279 @@
 <cfcomponent access="public" displayname="database">
-  <cffunction name="selectinskills_loop" access="remote">
-    <cfargument name="job_vacancy_id" type="INTEGER" required="true">
-    <cfargument name="job_rounds" type="INTEGER" required="true">
-    
-    <cfset CountVar = 0> 
-    <!--- Loop until CountVar = 5. --->
-    <cfset  interviewtypes_list = interviewtypes_list_jobs(arguments.job_vacancy_id)>
-    <cfset  skills_list = skills_list()>
-     <cfoutput>
-      <input type="hidden" value="#arguments.job_vacancy_id#" name="job_vacancy_id" id="job_vacancy_id">
-      <input type="hidden" value="#arguments.job_rounds#" name="job_rounds" id="job_rounds">
-      <cfset InterviewRoundId_list= ArrayToList(ValueArray(interviewtypes_list,"InterviewRoundId")) >
-      <input type="hidden" value="#arguments.job_rounds#" name="InterviewRoundId_list" value="#InterviewRoundId_list#" id="InterviewRoundId_list">
-    <cfloop query = "interviewtypes_list"> 
-    <cfset data = {
-      InterviewRoundId = #InterviewRoundId#
-    }/>
-    <cfinvoke 
-    component="database"
-    method="skills_list_jobs" 
-    returnVariable="methodResult" 
-    argumentCollection="#data#"
-  />
-     <cfset interview_lists_skills= ArrayToList(ValueArray(methodResult,"SkillId")) >
+  <cffunction access="remote" name="view_schedule_user">
+      <cfargument name="schedule_id" type="string" required="true">
+      <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+      <cfquery name="view_schedule_user_query" datasource="#application.datasource#" result="view_schedule_user_queryrs">
+        select * from  Candidate as A inner join  as B on A.ScheduleId=B.ScheduleId  where ReviewId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_id#">
+      </cfquery>
+  </cffunction>
+  <cffunction access="remote" name="add_schedulecandidate_form">
+    <cfargument name="candidate_id" type="string" required="true">
+    <cfargument name="schedule_date" type="string" required="true">
+    <cfargument name="schedule_time" type="string" required="true">
+    <cfargument name="schedule_interview_type" type="string" required="true">
+    <cfargument name="schedule_interview_panel" type="string" required="true">
+     <cfif (structKeyExists(arguments, "final_rounds")) eq 1> 
+       <cfset variables.final_rounds_val='1'>
+       <cfelse>
+        <cfset variables.final_rounds_val='0'>
+     </cfif>
+     
+    <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+    <cfquery name="add_schedulecandidate_form_query" datasource="#application.datasource#" result="panelmembers">
+    INSERT INTO [Schedule]
+    (
+      [CandidateId],
+      [InterviewRoundId],
+      [ScheduleDate],
+      [ScheduleTime],
+      [PanelId],
+      [CreatedDate],
+      [ModifiedDate],
+      [Status],
+      [Final_ROUND],
+      [Current_Status],
+      [Total_Mark],
+      [Final_Result]
+      )VALUES
+    (
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_type#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_date#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_time#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.final_rounds_val#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="4">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="0">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0">
+      )
+  </cfquery>
 
-    <div class="row">
-      <div class="form-group col-md-4">
+  <cfquery name="getPanelMembersList"  datasource="#application.datasource#"> 
+  SELECT B.* from [PanelMembers] as A inner join UserDetails as B on A.[UserId]=B.[UserId] where PanelId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#" /> AND A.Status=1 AND B.Status=1 
+</cfquery>
+<cfquery name="getcandidate_details"  datasource="#application.datasource#"> 
+  SELECT * from CandidateDetails where CandidateId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> AND Status=1 
+</cfquery>
+<cfset Candidate_Name = getcandidate_details.FirstName&getcandidate_details.LastName>
+<cfmail query="getcandidate_details" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:Interview call" type="html">
+  <cfmailpart type="html">
+   <html> 
+     <head>
+      <style type="text/css"> 
+       body { 
+       font-family:sans-serif;
+       font-size:12px;
+       color:navy;
+       }
+     </style> 
+   </head> 
+   <body>
+     <p>Dear #FirstName# #LastName#,</p>
+     <p>You Have been Short Listed for an Interview for you job position on #arguments.schedule_date# #arguments.schedule_time#.</p>
+     <p>Thanks Regards,<br>HR Manager</p>
+   </body>
+   </html>
+ </cfmailpart>
+</cfmail>
+<cfmail query="getPanelMembersList" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:New Interview Schedules" type="html">
+  <cfmailpart type="html">
+   <html> 
+     <head>
+      <style type="text/css"> 
+       body { 
+       font-family:sans-serif;
+       font-size:12px;
+       color:navy;
+       }
+     </style> 
+   </head> 
+   <body>
+     <p>Dear #FirstName# #LastName#,</p>
+     <p>#variables.Candidate_Name# Has been Schedule for an interview  on #arguments.schedule_date# #arguments.schedule_time#.</p>
+     <p>Thanks Regards,<br>HR Manager</p>
+   </body>
+   </html>
+ </cfmailpart>
+</cfmail>
+<cfoutput>success</cfoutput>
+</cffunction>
+<cffunction access="remote" name="schedule_candidate_form" returntype="any" returnFormat="json"> 
+  <cfargument name="candidate_id" type="string" required="true">
+  <cfargument name="job_id" type="string" required="true">
+  <form id="add_schedulecandidate_form">
+    <div class="form-row">
+     <div class="form-group col-md-2">
+      <label for="date">Date:</label>
+      <input  type="hidden" class="form-control" name="candidate_id" value="<cfoutput>#arguments.candidate_id#</cfoutput>" id="candidate_id" >
+    </div>
+    <div class="form-group col-md-4">
+      <input required type="text" class="form-control" name="schedule_date" id="schedule_date" >
+    </div>
+    <div class="form-group col-md-2">
+      <label for="date">Time:</label>
+    </div>
+    <div class="form-group col-md-4">
+      <input required type="text" class="form-control" name="schedule_time" id="schedule_time">
+    </div>
+  </div>
+  <div class="form-row">
+   <div class="form-group col-md-4">
+    <label for="inter_pan">Interview Panel:</label>
+  </div>
+  <div class="form-group col-md-6">
+    <cfset  panel_lists = panel_lists()>
+    <select class="form-control" id="schedule_interview_panel" name="schedule_interview_panel" required>
+      <option>--Please Select--</option>
+      <cfoutput> 
+        <cfloop query="panel_lists">
+         <option value="#PanelId#">#Name#</option>
+       </cfloop>
+     </cfoutput>
+   </select>
+ </div>
+</div>
+<div class="form-row">
+ <div class="form-group col-md-4">
+  <label for="inter_pan">Interview Round:</label>
+</div>
+<div class="form-group col-md-6">
+  <cfset  interview_type = interview_type(arguments.candidate_id,arguments.job_id)>
+  <label for="inter_pan">Final Round:</label><input type="checkbox" name="final_rounds">
+  <select  class="form-control" id="schedule_interview_type" name="schedule_interview_type" required>
+    <option>--Please Select--</option>
+    <cfoutput> 
+      <cfloop query="interview_type">
+       <option value="#InterviewRoundId#">#Name#</option>
+     </cfloop>
+   </cfoutput>
+ </select>
+</div>
+</div>
+<div class="form-row">
+ <div class="form-group col-md-12">
+  <button type="submit" class="btn btn-primary">Schedule Candidate</button>
+</div>
+</div>
+</form>
+</cffunction> 
+<cffunction name="job_vacancy_list_delete" access="remote">
+  <cfargument name="action_id" type="INTEGER" required="true">
+  <cfquery name="delete_job_vacancy" datasource="#application.datasource#" result="myResult">  
+  UPDATE JobVacancy SET Status = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0" /> where JobVacancyId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.action_id#" />
+</cfquery>
+<cfreturn myResult.RECORDCOUNT>
+</cffunction>
+<cffunction access="remote" name="selecting_skills_form_db" returntype="any" returnFormat="json">
+  <cfargument name="job_vacancy_id" type="string" required="true">
+  <cfargument name="InterviewRoundId_list" type="string" required="true">
+  <cfloop list="#arguments.InterviewRoundId_list#" index="interview_round_id">
+    <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+    <!---  interviewtypes_skills+interview_round_id --->
+    <cfset interviewtypes_skills_lists=arguments['interviewtypes_skills#interview_round_id#']>
+    <cfset interviewtypes_skills_lists_id=ArrayTolist(ValueArray(fn_interviewtypes_skills_db('#interview_round_id#'),'SkillId'))>
+    <cfset interview_skills_listCommon = listCommon(interviewtypes_skills_lists,interviewtypes_skills_lists_id)>
+    <cfset interview_skills_delete= listCompare(interviewtypes_skills_lists_id,interview_skills_listCommon)>
+
+    <cfset interview_skills_add= listCompare(interviewtypes_skills_lists,interview_skills_listCommon)>
+
+
+    <cfloop list="#interview_skills_delete#" item="ivw_skills_delete_ls">
+
+     <cfquery name="deleteInterview_type" datasource="#application.datasource#" result="deleteInterview_type_rs">
+     update InterviewSkills Set Status=0 where InterviewRoundId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#interview_round_id#" /> AND SkillId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#ivw_skills_delete_ls#" />
+     </cfquery>
+
+   </cfloop>
+   <cfloop list="#interview_skills_add#" index="interview_skills_add_value">       
+    <cfquery name="interview_skills_add_query" datasource="#application.datasource#" result="interview_skills_add_query">
+    INSERT INTO [InterviewSkills]
+    (
+      [InterviewRoundId],
+      [SkillId],
+      [CreatedDate],
+      [ModifiedDate],
+      [Status]
+      )VALUES
+    (
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#interview_round_id#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#interview_skills_add_value#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">
+      )
+  </cfquery>
+</cfloop>
+
+</cfloop>
+<cfoutput>success</cfoutput>
+</cffunction>
+<cffunction name="fn_interviewtypes_skills_db" access="public">
+  <cfargument name="interview_round_id" type="INTEGER" required="true">
+  <cfquery datasource="#application.datasource#" name="fn_interviewtypes_skills_dbs">
+  select * from InterviewSkills where  Status=1 AND InterviewRoundId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.interview_round_id#" />
+</cfquery>
+<cfreturn fn_interviewtypes_skills_dbs>
+</cffunction> 
+<cffunction name="selectinskills_loop" access="remote">
+  <cfargument name="job_vacancy_id" type="INTEGER" required="true">
+  <cfargument name="job_rounds" type="INTEGER" required="true">
+
+  <cfset CountVar = 0> 
+  <!--- Loop until CountVar = 5. --->
+  <cfset  interviewtypes_list = interviewtypes_list_jobs(arguments.job_vacancy_id)>
+  <cfset  skills_list = skills_list()>
+  <cfoutput>
+    <input type="hidden" value="#arguments.job_vacancy_id#" name="job_vacancy_id" id="job_vacancy_id">
+    <input type="hidden" value="#arguments.job_rounds#" name="job_rounds" id="job_rounds">
+    <cfset InterviewRoundId_list= ArrayToList(ValueArray(interviewtypes_list,"InterviewRoundId")) >
+    <input type="hidden" value="#variables.InterviewRoundId_list#" name="InterviewRoundId_list" value="#InterviewRoundId_list#" id="InterviewRoundId_list">
+    <cfloop query = "interviewtypes_list"> 
+      <cfset data = {
+      InterviewRoundId = #InterviewRoundId#
+      }/>
+      <cfinvoke 
+      component="database"
+      method="skills_list_jobs" 
+      returnVariable="methodResult" 
+      argumentCollection="#data#"
+      />
+      <cfset interview_lists_skills= ArrayToList(ValueArray(methodResult,"SkillId")) >
+
+      <div class="row">
+        <div class="form-group col-md-4">
          <label >Skills for #Name#</label >
-      </div>
-     <div class="form-group col-md-8">
-       <select  class="form-control interviewtypes_skills" name="interviewtypes_skills#InterviewTypeId#" id="interviewtypes_skills#InterviewTypeId#" multiple required>
+       </div>
+       <div class="form-group col-md-8">
+         <select  class="form-control interviewtypes_skills2" name="interviewtypes_skills#InterviewRoundId#" id="interviewtypes_skills#InterviewRoundId#" multiple required>
           <cfoutput>
-                <cfloop query="skills_list">
-                   <option value="#SkillId#"<cfif ListContains(interview_lists_skills,#SkillId#) neq 0> selected</cfif> > #Name#</option>
-                </cfloop>
-            </cfoutput>
+            <cfloop query="skills_list">
+             <option value="#SkillId#"<cfif ListContains(interview_lists_skills,#SkillId#) neq 0> selected</cfif> > #Name#</option>
+           </cfloop>
+         </cfoutput>
        </select>
      </div>
-    </div>
-    </cfloop>
-      </cfoutput>
-        
-     
+   </div>
+ </cfloop>
+</cfoutput>
+
+
 </cffunction>
 <cffunction name="skills_list_jobs"  access="public">
   <cfargument name="InterviewRoundId" type="string" required="true">
-    <cfquery name="skills_list_jobs" datasource="#application.datasource#">  
-    select A.SkillId from Skills as A inner join InterviewSkills as B on A.SkillId=B.SkillId  where A.status=1 AND B.status=1 AND InterviewRoundId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.InterviewRoundId#" />;
-  </cfquery>
-  <cfreturn skills_list_jobs>
+  <cfquery name="skills_list_jobs" datasource="#application.datasource#">  
+  select A.SkillId from Skills as A inner join InterviewSkills as B on A.SkillId=B.SkillId  where A.status=1 AND B.status=1 AND InterviewRoundId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.InterviewRoundId#" />;
+</cfquery>
+<cfreturn skills_list_jobs>
 </cffunction>
 <cffunction access="public" name="interviewtypes_list_jobs">
   <cfargument name="job_vacancy_id" type="string" required="true">
-   <cfquery datasource="#application.datasource#" name="interviewtypes_list_jobs">
-     select * from InterviewRounds as B  inner join InterviewTypes as A on A.InterviewTypeId=B.InterviewTypeId where JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_vacancy_id#" /> AND B.Status=1
-   </cfquery>
-   <cfreturn interviewtypes_list_jobs>
+  <cfquery datasource="#application.datasource#" name="interviewtypes_list_jobs">
+  select Distinct B.InterviewRoundId,* from InterviewRounds as B  inner join InterviewTypes as A on A.InterviewTypeId=B.InterviewTypeId where JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_vacancy_id#" /> AND B.Status=1
+</cfquery>
+<cfreturn interviewtypes_list_jobs>
 </cffunction>
 <cffunction access="remote" name="selectinground" returntype="any" returnFormat="json">   
   <cfargument name="job_vacancy_id" type="string" required="true">
@@ -76,26 +294,26 @@
   <!--- Loop until CountVar = 5. --->
   <cfset condition_loop=LSParseNumber(arguments.job_rounds)+1>
   <cfloop condition = "CountVar LESS THAN #condition_loop#"> 
-      <cfquery name="selectinground" datasource="#application.datasource#" result="selectingroundrsss">
-  
-      insert into InterviewRounds (JobId
-             ,InterviewTypeId,
-             Status,
-             round_order) values (
-             <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_vacancy_id#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments['interviewtypes#CountVar#']#" />,1,#CountVar#);
-      </cfquery>
-      <cfloop list="#arguments['interviewtypes_skills#CountVar#']#"  item="skill_id">
-        <cfquery name="selectingroundskills#CountVar#" datasource="#application.datasource#" result="selectingroundskillsrss#CountVar#">
-        insert into InterviewSkills (InterviewRoundId
-           ,SkillId
-           ,CreatedDate
-           ,ModifiedDate
-           ,Status) values (
-             <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#selectingroundrsss.GENERATEDKEY#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#skill_id#" />,'#variables.todaydate#','#variables.todaydate#',1);
-      </cfquery>
-      </cfloop>
-      <cfset CountVar=CountVar+1>
-  </cfloop>
+    <cfquery name="selectinground" datasource="#application.datasource#" result="selectingroundrsss">
+
+    insert into InterviewRounds (JobId
+     ,InterviewTypeId,
+     Status,
+     round_order) values (
+     <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_vacancy_id#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments['interviewtypes#CountVar#']#" />,1,#CountVar#);
+   </cfquery>
+   <cfloop list="#arguments['interviewtypes_skills#CountVar#']#"  item="skill_id">
+    <cfquery name="selectingroundskills#CountVar#" datasource="#application.datasource#" result="selectingroundskillsrss#CountVar#">
+    insert into InterviewSkills (InterviewRoundId
+     ,SkillId
+     ,CreatedDate
+     ,ModifiedDate
+     ,Status) values (
+     <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#selectingroundrsss.GENERATEDKEY#" />,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#skill_id#" />,'#variables.todaydate#','#variables.todaydate#',1);
+   </cfquery>
+ </cfloop>
+ <cfset CountVar=CountVar+1>
+</cfloop>
 <cfoutput>success</cfoutput>
 </cffunction>
 <cffunction name="jobvacancyedit" access="remote">
@@ -108,196 +326,138 @@
   <cfargument name="select_interview_type" type="string" required="true">
   <cfargument name="job_id" type="string" required="true">
   <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
-   <cfset variables.job_rounds= ListLen(arguments.select_interview_type)>
+  <cfset variables.job_rounds= ListLen(arguments.select_interview_type)>
   <cfquery datasource="#application.datasource#" name="interview_roundss" result="interview_roundsrss">
-    select * from InterviewRounds where JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />AND status=1
-  </cfquery>
-  <cfset InterviewTypeId_list=ArrayToList(ValueArray(interview_roundss,"InterviewTypeId"))>
-  <cfset Interview_type_listCommon = listCommon(arguments.select_interview_type,InterviewTypeId_list)>
-  <cfset Interview_type_delete= listCompare(InterviewTypeId_list,Interview_type_listCommon)>
-  <cfset Interview_type_add= listCompare(arguments.select_interview_type,Interview_type_listCommon)>
+  select * from InterviewRounds where JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />AND status=1
+</cfquery>
+<cfset InterviewTypeId_list=ArrayToList(ValueArray(interview_roundss,"InterviewTypeId"))>
+<cfset Interview_type_listCommon = listCommon(arguments.select_interview_type,InterviewTypeId_list)>
+<cfset Interview_type_delete= listCompare(InterviewTypeId_list,Interview_type_listCommon)>
+<cfset Interview_type_add= listCompare(arguments.select_interview_type,Interview_type_listCommon)>
 
-  <cfloop list="#Interview_type_delete#" index="Interview_type_delete_list">       
-    <cfquery name="deleteInterview_type" datasource="#application.datasource#" result="Interview_types_delete">
-    update InterviewRounds Set Status=0 where InterviewTypeId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#Interview_type_delete_list#" /> AND JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />
-    </cfquery>
-  </cfloop> 
-  <cfloop list="#Interview_type_add#" index="Interview_type_add_value">       
-    <cfquery name="Interview_type_add_query" datasource="#application.datasource#" result="Interview_type_add_query">
-    INSERT INTO InterviewRounds (JobId ,InterviewTypeId,Status)
-    VALUES(
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />,   
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#Interview_type_add_value#" />,  
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">
-      )
+<cfloop list="#Interview_type_delete#" index="Interview_type_delete_list">       
+  <cfquery name="deleteInterview_type" datasource="#application.datasource#" result="Interview_types_delete">
+  update InterviewRounds Set Status=0 where InterviewTypeId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#Interview_type_delete_list#" /> AND JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />
   </cfquery>
+</cfloop> 
+<cfloop list="#Interview_type_add#" index="Interview_type_add_value">       
+  <cfquery name="Interview_type_add_query" datasource="#application.datasource#" result="Interview_type_add_query">
+  INSERT INTO InterviewRounds (JobId ,InterviewTypeId,Status)
+  VALUES(
+    <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />,   
+    <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#Interview_type_add_value#" />,  
+    <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">
+    )
+</cfquery>
 </cfloop>
-  <cfquery name="update_job_vacancy" datasource="#application.datasource#" result="update_job_vacancyrs">
-  update JobVacancy Set JobPosition=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobPosition#" />,
-   JobDescription= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobDescription#" />,
-   JobCode= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobCode#" />,
-   JobResponsibilty= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobResponsibilty#" />,
-   Vacancy= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Vacancy#" />,
-   StartDate= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.StartDate#" />,
-   EndDate= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.EndDate#" />,
-   ModifiedDate='#variables.todaydate#',
-   ModifiedBy= #session.user_session#,
-   rounds= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.job_rounds#" />
-    where JobVacancyId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />
-  </cfquery>
- 
+<cfquery name="update_job_vacancy" datasource="#application.datasource#" result="update_job_vacancyrs">
+update JobVacancy Set JobPosition=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobPosition#" />,
+ JobDescription= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobDescription#" />,
+ JobCode= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobCode#" />,
+ JobResponsibilty= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobResponsibilty#" />,
+ Vacancy= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Vacancy#" />,
+ StartDate= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.StartDate#" />,
+ EndDate= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.EndDate#" />,
+ ModifiedDate='#variables.todaydate#',
+ ModifiedBy= #session.user_session#,
+ rounds= <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.job_rounds#" />
+ where JobVacancyId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" />
+</cfquery>
+
 <cfoutput>#variables.job_rounds#,#arguments.job_id#</cfoutput>
 </cffunction>
 <cffunction name="edit_job_vacancy" access="remote">
   <cfargument name="job_id" type="string" required="true">
   <cfquery name="edit_job_vacancy" datasource="#application.datasource#">
   select * from JobVacancy where JobVacancyId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.job_id#" />
-  </cfquery>
+</cfquery>
 <cfoutput query="edit_job_vacancy">
   <form action="" id="form_edit_job_vacancy">
-          <input type="hidden" value="#JobVacancyId#" name="job_id">
-         <div class="modal-body row">
-            <div class="job_vacancy_div">
-                  <div class="form-row">
-                     <label class="control-label col-sm-2">Job Name</label>
-                     <div class="col-sm-4 form-group ">
-                        <input type="text" pattern=".{3,35}" title="3 to 35 characters" class="form-control" id="JobPosition" required="" value="#JobPosition#" name="JobPosition" placeholder="Job Name">
-                     </div>
-                     <label class="control-label col-sm-2">Job Code</label>
-                     <div class="col-sm-4 form-group ">
-                        <input type="text" pattern=".{1,35}" required="" title="1 to 35 characters" class="form-control" id="JobCode" value="#JobCode#" name="JobCode" placeholder="Job Code">
-                     </div>
-                  </div>
-                  <div class="form-row ">
-                     <label class="control-label col-sm-2">JobDescription</label>
-                     <div class="col-sm-4 form-group ">
-                        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobDescription"  name="JobDescription">#JobDescription#</textarea>
-                     </div>
-                     <label class="control-label col-sm-2">JobResponsibilty</label>
-                     <div class="col-sm-4 form-group ">
-                        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobResponsibilty" name="JobResponsibilty">#JobResponsibilty#</textarea>
-                     </div>
-                  </div>
-                  <div class="form-row ">
-                     <label class="control-label col-sm-2">StartDate</label>
-                     <div class="col-sm-4 form-group ">
-                        <input type="text" required=""  value="#StartDate#" class="form-control" id="StartDate" name="StartDate">
-                     </div>
-                     <label class="control-label col-sm-2">EndDate</label>
-                     <div class="col-sm-4 form-group ">
-                        <input type="text" class="form-control" value="#EndDate#"  required="" id="EndDate" name="EndDate">
-                     </div>
-                  </div>
-                  <div class="form-row ">
-                     <label class="control-label col-sm-2">Vacancy</label>
-                     <div class="col-sm-4 form-group ">
-                        <input type="number" pattern=".{5,20}" required="" title="5 to 20 characters" class="form-control" id="Vacancy" value="#Vacancy#" name="Vacancy" placeholder="Vacancy">
-                     </div>
-                  </div>
-                  <div class="form-row ">
-                     <label class="control-label col-sm-2">Interview Type</label>
-                     <div class="col-sm-4 form-group ">
-                      <cfset  interview_type_id = ArrayToList(ValueArray(interview_type("",'#JobVacancyId#'),'InterviewTypeId'))>
-                      <cfset  interview_type_all = interview_type_all()>
-                    <select  class="form-control" name="select_interview_type" id="select_interview_type" multiple required>
-
-                    <cfoutput>
-                    <cfloop query="interview_type_all">
-
-                       <option value="#InterviewTypeId#" <cfif ListContains(interview_type_id,#InterviewTypeId#) neq 0> selected</cfif> >#Name#</option>
-                    </cfloop>
-                    </cfoutput>
-                    </select>
-                     </div>
-                  </div>
-   </div>
+    <input type="hidden" value="#JobVacancyId#" name="job_id">
+    <div class="modal-body row">
+      <div class="job_vacancy_div">
+        <div class="form-row">
+         <label class="control-label col-sm-2">Job Name</label>
+         <div class="col-sm-4 form-group ">
+          <input type="text" pattern=".{3,35}" title="3 to 35 characters" class="form-control" id="JobPosition" required="" value="#JobPosition#" name="JobPosition" placeholder="Job Name">
+        </div>
+        <label class="control-label col-sm-2">Job Code</label>
+        <div class="col-sm-4 form-group ">
+          <input type="text" pattern=".{1,35}" required="" title="1 to 35 characters" class="form-control" id="JobCode" value="#JobCode#" name="JobCode" placeholder="Job Code">
+        </div>
       </div>
-      <div class="modal-footer">
-         <div class="form-group col-md-12">
-            <button type="submit" class="btn btn-primary">Edit JobVacancy</button>
-         </div>  
+      <div class="form-row ">
+       <label class="control-label col-sm-2">JobDescription</label>
+       <div class="col-sm-4 form-group ">
+        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobDescription"  name="JobDescription">#JobDescription#</textarea>
       </div>
-      </form>
+      <label class="control-label col-sm-2">JobResponsibilty</label>
+      <div class="col-sm-4 form-group ">
+        <textarea class="form-control" pattern=".{3,50}" required="" title="3 to 50 characters" id="JobResponsibilty" name="JobResponsibilty">#JobResponsibilty#</textarea>
+      </div>
+    </div>
+    <div class="form-row ">
+     <label class="control-label col-sm-2">StartDate</label>
+     <div class="col-sm-4 form-group ">
+      <input type="text" required=""  value="#StartDate#" class="form-control" id="StartDate" name="StartDate">
+    </div>
+    <label class="control-label col-sm-2">EndDate</label>
+    <div class="col-sm-4 form-group ">
+      <input type="text" class="form-control" value="#EndDate#"  required="" id="EndDate" name="EndDate">
+    </div>
+  </div>
+  <div class="form-row ">
+   <label class="control-label col-sm-2">Vacancy</label>
+   <div class="col-sm-4 form-group ">
+    <input type="number" pattern=".{5,20}" required="" title="5 to 20 characters" class="form-control" id="Vacancy" value="#Vacancy#" name="Vacancy" placeholder="Vacancy">
+  </div>
+</div>
+<div class="form-row ">
+ <label class="control-label col-sm-2">Interview Type</label>
+ <div class="col-sm-4 form-group ">
+  <cfset  interview_type_id = ArrayToList(ValueArray(interview_type("",'#JobVacancyId#'),'InterviewTypeId'))>
+  <cfset  interview_type_all = interview_type_all()>
+  <select  class="form-control" name="select_interview_type" id="select_interview_type" multiple required>
+
+    <cfoutput>
+      <cfloop query="interview_type_all">
+
+       <option value="#InterviewTypeId#" <cfif ListContains(interview_type_id,#InterviewTypeId#) neq 0> selected</cfif> >#Name#</option>
+     </cfloop>
+   </cfoutput>
+ </select>
+</div>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+ <div class="form-group col-md-12">
+  <button type="submit" class="btn btn-primary">Edit JobVacancy</button>
+</div>  
+</div>
+</form>
 </cfoutput>
 </cffunction>
 <cffunction access="remote" name="interview_type_all" returntype="any" returnFormat="json">
   <cfquery datasource="#application.datasource#" name="interview_type_all">
-    select * from InterviewTypes where status=1;
-  </cfquery>
-  <cfreturn interview_type_all>
+  select * from InterviewTypes where status=1;
+</cfquery>
+<cfreturn interview_type_all>
 </cffunction>  
 <cffunction access="remote" name="panel_lists" returntype="any" returnFormat="json">
   <cfquery  datasource="#application.datasource#" name="panel_lists">
-    select * from panel where status=1
-  </cfquery>
-  <cfreturn panel_lists>
+  select * from panel where status=1
+</cfquery>
+<cfreturn panel_lists>
 </cffunction>  
 <cffunction access="remote" name="interview_type" returntype="any" returnFormat="json">
   <cfargument name="candidate_id" type="string" required="true">
   <cfargument name="job_id" type="string" required="true">
   <cfquery  datasource="#application.datasource#" name="interview_type">
-    select  A.InterviewTypeId,A.Name from InterviewTypes as A inner join InterviewRounds as B on A.InterviewTypeId=B.InterviewTypeId where A.status=1 AND B.status=1 AND B.JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" /> 
-  </cfquery>
-  <cfreturn interview_type>
+  select  B.InterviewRoundId,A.InterviewTypeId,A.Name from InterviewTypes as A inner join InterviewRounds as B on A.InterviewTypeId=B.InterviewTypeId where A.status=1 AND B.status=1 AND B.JobId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.job_id#" /> 
+</cfquery>
+<cfreturn interview_type>
 </cffunction> 
-<cffunction access="remote" name="schedule_candidate_form" returntype="any" returnFormat="json"> 
-  <cfargument name="candidate_id" type="string" required="true">
-  <cfargument name="job_id" type="string" required="true">
-    <form id="add_schedulecandidate_form">
-      <div class="form-row">
-         <div class="form-group col-md-2">
-            <label for="date">Date:</label>
-             <input  type="hidden" class="form-control" value="#arguments.candidate_id#" id="candidate_id" >
-         </div>
-         <div class="form-group col-md-4">
-            <input required type="text" class="form-control" id="schedule_date" >
-         </div>
-         <div class="form-group col-md-2">
-            <label for="date">Time:</label>
-         </div>
-         <div class="form-group col-md-4">
-            <input required type="text" class="form-control" id="schedule_time">
-         </div>
-      </div>
-      <div class="form-row">
-         <div class="form-group col-md-4">
-            <label for="inter_pan">Interview Panel:</label>
-         </div>
-         <div class="form-group col-md-6">
-            <cfset  panel_lists = panel_lists()>
-            <select  class="form-control" id="schedule_interview_panel" required>
-              <option>--Please Select--</option>
-              <cfoutput> 
-                <cfloop query="panel_lists">
-                 <option value="#PanelId#">#Name#</option>
-               </cfloop>
-              </cfoutput>
-            </select>
-         </div>
-      </div>
-      <div class="form-row">
-         <div class="form-group col-md-4">
-            <label for="inter_pan">Interview Type:</label>
-         </div>
-         <div class="form-group col-md-6">
-            <cfset  interview_type = interview_type(arguments.candidate_id,arguments.job_id)>
-            <select  class="form-control" id="schedule_interview_type" required>
-              <option>--Please Select--</option>
-              <cfoutput> 
-                <cfloop query="interview_type">
-                 <option value="#InterviewTypeId#">#Name#</option>
-               </cfloop>
-              </cfoutput>
-            </select>
-         </div>
-      </div>
-      <div class="form-row">
-         <div class="form-group col-md-12">
-            <button type="submit" class="btn btn-primary">Schedule Candidate</button>
-         </div>
-      </div>
-    </form>
-</cffunction>  
 <cffunction access="remote" name="insertjob_vacancy" returntype="any" returnFormat="json">   
   <cfargument name="JobPosition" type="string" required="true">
   <cfargument name="JobCode" type="string" required="true">
@@ -310,90 +470,90 @@
   
   <cfquery name="insertjob_vacancy" datasource="#application.datasource#" result="insertjob_vacancyrs">
   insert into JobVacancy
-           (JobPosition
-           ,JobCode
-           ,JobDescription
-           ,JobResponsibilty
-           ,Vacancy
-           ,StartDate
-           ,EndDate
-           ,CreatedDate
-           ,ModifiedDate
-           ,CreatedBy
-           ,ModifiedBy
-           ,Status,rounds) values (
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobPosition#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobCode#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobDescription#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobResponsibilty#" />,      
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Vacancy#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.StartDate#" />,
-    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.EndDate#" />,
-    '#variables.todaydate#',
-    '#variables.todaydate#',
-    #session.user_session#,
-    #session.user_session#,
-    1,
-    <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.rounds#" />
-    )
-  </cfquery>
- 
-<cfoutput>#insertjob_vacancyrs["GENERATEDKEY"]#,#arguments.rounds#</cfoutput>
-</cffunction>
-<cffunction name="interviewtypes_list"  access="public">
+   (JobPosition
+     ,JobCode
+     ,JobDescription
+     ,JobResponsibilty
+     ,Vacancy
+     ,StartDate
+     ,EndDate
+     ,CreatedDate
+     ,ModifiedDate
+     ,CreatedBy
+     ,ModifiedBy
+     ,Status,rounds) values (
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobPosition#" />,
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobCode#" />,
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobDescription#" />,
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.JobResponsibilty#" />,      
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Vacancy#" />,
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.StartDate#" />,
+     <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.EndDate#" />,
+     '#variables.todaydate#',
+     '#variables.todaydate#',
+     #session.user_session#,
+     #session.user_session#,
+     1,
+     <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.rounds#" />
+     )
+   </cfquery>
+
+   <cfoutput>#insertjob_vacancyrs["GENERATEDKEY"]#,#arguments.rounds#</cfoutput>
+ </cffunction>
+ <cffunction name="interviewtypes_list"  access="public">
   <cfquery name="interviewtypes_list" datasource="#application.datasource#">  
-    select InterviewTypeId,Name from InterviewTypes where status=1 ;
+  select InterviewTypeId,Name from InterviewTypes where status=1 ;
 </cfquery>
 <cfreturn interviewtypes_list>
 </cffunction>
 <cffunction name="selectinground_loop" access="remote">
-    <cfargument name="job_vacancy_id" type="INTEGER" required="true">
-    <cfargument name="job_rounds" type="INTEGER" required="true">
-    
-    <cfset CountVar = 0> 
-    <!--- Loop until CountVar = 5. --->
-    <cfset  interviewtypes_list = interviewtypes_list()>
-    <cfset  skills_list = skills_list()>
-    
-     <cfoutput>
-      <input type="hidden" value="#arguments.job_vacancy_id#" name="job_vacancy_id" id="job_vacancy_id">
-      <input type="hidden" value="#arguments.job_rounds#" name="job_rounds" id="job_rounds">
+  <cfargument name="job_vacancy_id" type="INTEGER" required="true">
+  <cfargument name="job_rounds" type="INTEGER" required="true">
+
+  <cfset CountVar = 0> 
+  <!--- Loop until CountVar = 5. --->
+  <cfset  interviewtypes_list = interviewtypes_list()>
+  <cfset  skills_list = skills_list()>
+
+  <cfoutput>
+    <input type="hidden" value="#arguments.job_vacancy_id#" name="job_vacancy_id" id="job_vacancy_id">
+    <input type="hidden" value="#arguments.job_rounds#" name="job_rounds" id="job_rounds">
 
     <cfloop condition = "CountVar LESS THAN #job_rounds#"> 
-    <cfset CountVar = CountVar + 1> 
-    <div class="row">
-      <div class="form-group col-md-6">
-    <label >Round #CountVar#</label >
-   <select  class="form-control interviewtypes" name="interviewtypes#CountVar#" id="interviewtypes#CountVar#" required>
-      <option value="">--Please Select--</option>
-    <cfloop query="interviewtypes_list">
-        <option  value="#InterviewTypeId#">#Name#</option>
-    </cfloop>
-     </select>
- </div>
- <div class="form-group col-md-6">
-    <label >Skills for Round #CountVar#</label >
-   <select  class="form-control" name="interviewtypes_skills#CountVar#" class="interviewtypes_skills" id="interviewtypes_skills#CountVar#" multiple required>
-      <cfoutput>
-            <cfloop query="skills_list">
-               <option value="#SkillId#">#Name#</option>
+      <cfset CountVar = CountVar + 1> 
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label >Round #CountVar#</label >
+          <select  class="form-control interviewtypes" name="interviewtypes#CountVar#" id="interviewtypes#CountVar#" required>
+            <option value="">--Please Select--</option>
+            <cfloop query="interviewtypes_list">
+              <option  value="#InterviewTypeId#">#Name#</option>
             </cfloop>
-        </cfoutput>
-   </select>
- </div>
-    </div>
-    </cfloop>
- 
-      </cfoutput>
-        
-     
+          </select>
+        </div>
+        <div class="form-group col-md-6">
+          <label >Skills for Round #CountVar#</label >
+          <select  class="form-control" name="interviewtypes_skills#CountVar#" class="interviewtypes_skills" id="interviewtypes_skills#CountVar#" multiple required>
+            <cfoutput>
+              <cfloop query="skills_list">
+               <option value="#SkillId#">#Name#</option>
+             </cfloop>
+           </cfoutput>
+         </select>
+       </div>
+     </div>
+   </cfloop>
+
+ </cfoutput>
+
+
 </cffunction>
-  <cffunction name="panelmember_list_delete" access="remote">
-    <cfargument name="action_id" type="INTEGER" required="true">
-    <cfquery name="delete_candidate" datasource="#application.datasource#" result="myResult">  
-    UPDATE UserDetails SET Status = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0" /> where UserId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
-  </cfquery>
-  <cfreturn myResult.RECORDCOUNT>
+<cffunction name="panelmember_list_delete" access="remote">
+  <cfargument name="action_id" type="INTEGER" required="true">
+  <cfquery name="delete_candidate" datasource="#application.datasource#" result="myResult">  
+  UPDATE UserDetails SET Status = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0" /> where UserId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
+</cfquery>
+<cfreturn myResult.RECORDCOUNT>
 
 </cffunction>
 <cffunction name="listCompare" output="false" returnType="string">
@@ -762,6 +922,7 @@ select STUFF((SELECT Distinct ',' + Cast(C.SkillId as varchar(35)) from Candidat
 <cfoutput query="edit_candidate">
 
   <form id="edit_candidate_form" action="" enctype="multipart/form-data">
+    <input type="hidden" value="<cfoutput>#arguments.action_id#</cfoutput>" name="action_id" >
     <div class="form-row">
      <div class="form-group col-md-3">
       <label for="usrname">First Name</label>
@@ -835,30 +996,24 @@ select STUFF((SELECT Distinct ',' + Cast(C.SkillId as varchar(35)) from Candidat
    <input type="number" min="1000" max="1000000000"  value="#ExpectedCtc#"  required   name="cn_expected_ctc"  class="form-control" id="cn_expected_ctc" placeholder="Expected Ctc">
  </div>
 </div>
-<div class="form-row">
 
-  <div class="form-group col-md-6">
-   <label for="notice Period">Resume Upload</label>
-   <input type="file" accept="application/pdf,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required name="cn_resume_upload" class="form-control" id="cn_resume_upload">
- </div>
-</div>
 <div class="form-row">
   <div class="form-group col-md-6">
-   <label for="current_ctc">skills</label>
-   <cfset  skills_list = skills_list()>
-   <select  class="form-control" name="cn_resume_skills" id="cn_resume_skills" multiple required>
+    <label for="current_ctc">skills</label>
+    <cfset  skills_list = skills_list()>
+    <select  class="form-control" name="cn_resume_skills" id="cn_resume_skills" multiple required>
     <cfoutput>
       <cfloop query="skills_list">
-
        <option value="#SkillId#" <cfif ListContains(candidate_skills.candidate_skills,#SkillId#) neq 0> selected</cfif> >#Name#</option>
      </cfloop>
-   </cfoutput>
- </select>
-</div>
-<div class="form-group col-md-6">
- <label for="current_ctc">Notice Period(In Months)</label>
- <input  type="number" min="0" max="60" value="#NoticePeriod#" required  name="cn_notice_period" class="form-control" id="cn_notice_period" >
-</div>
+    </cfoutput>
+    </select>
+  </div>
+  <input type="hidden" name="SKILLLISTS" value="#candidate_skills.candidate_skills#"> 
+  <div class="form-group col-md-6">
+    <label for="current_ctc">Notice Period(In Months)</label>
+    <input  type="number" min="0" max="60" value="#NoticePeriod#" required  name="cn_notice_period" class="form-control" id="cn_notice_period" >
+  </div>
 </div>
 <div class="form-row">
   <div class="form-group col-md-12">
@@ -869,6 +1024,84 @@ select STUFF((SELECT Distinct ',' + Cast(C.SkillId as varchar(35)) from Candidat
 
 </cfoutput>
 </cffunction>
+<cffunction access="remote" name="UpdateCandidate_form"  returntype="any" returnFormat="json">
+
+    <cfargument name="action_id" type="integer" required="true">
+    <cfargument name="cn_fname" type="string" required="true">
+    <cfargument name="cn_lname" type="string" required="true">
+    <cfargument name="cn_applied_for" type="integer" required="true">
+    <cfargument name="cn_designation" type="integer" required="true">
+    <cfargument name="cn_location" type="string" required="true">
+    <cfargument name="cn_email" type="string" required="true">
+    <cfargument name="cn_contact_no" type="string" required="true">
+    <cfargument name="cn_experience" type="string" required="true">
+    <cfargument name="cn_current_company" type="string" required="true">
+    <cfargument name="cn_current_ctc" type="string" required="true">
+    <cfargument name="cn_expected_ctc" type="string" required="true">
+    <cfargument name="cn_notice_period" type="string" required="true">
+    <cfargument name="cn_resume_skills" type="string" required="true">  
+    <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")> 
+      <cfquery name="UpdateCandidateInfo" result="UpdateCandidateInfo" datasource="#application.datasource#">
+        update CandidateDetails set 
+          FirstName = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_fname#" />,
+          LastName = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_lname#" />,
+          Email = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_email#" />,
+          DesignationId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.cn_designation#" />,
+          AppliedFor = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.cn_applied_for#" />,
+          ContactNumber = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_contact_no#" />,
+          Address = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_location#" />,
+          Experience = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_experience#" />,
+          CurrentCtc = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_current_ctc#" />,
+          ExpectedCtc = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_expected_ctc#" />,
+          CurrentCompany = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_current_company#" />,
+          NoticePeriod = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.cn_notice_period#" />,
+          ModifiedDate = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+          ModifiedBy = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.user_session#" />,
+          Status = 1 where CandidateId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.action_id#" />  
+    </cfquery>
+    <cfset variables.CommonSkills = listCommon(#arguments.cn_resume_skills#,#arguments.SkillLists#)>
+    <cfset variables.DeleteSkills = listCompare(#arguments.SkillLists#,#arguments.cn_resume_skills#)>
+    <cfset variables.NewSkills = listCompare(#arguments.cn_resume_skills#,#arguments.SkillLists#)>
+    <cfif ListLen(variables.NewSkills) gt 0>   
+      <cfloop list="#variables.NewSkills#" index="Key">
+        <cfquery name="AddSkills" datasource="#application.datasource#">  
+          INSERT INTO CandidateSkills
+           (CandidateId,
+            SkillId
+           ,CreatedDate
+           ,CreatedBy
+           ,ModifiedDate
+           ,ModifiedBy
+           ,Status)
+            VALUES
+           (<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.action_id#" />
+           ,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#Key#" />             
+           ,<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">
+           ,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.user_session#" />
+           ,<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">
+           ,<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.user_session#" />
+           ,1)
+        </cfquery>
+      </cfloop>
+    </cfif>
+    <cfif ListLen(variables.DeleteSkills) gt 0> 
+      <cfquery name="DeleteSkills" datasource="#application.datasource#">  
+        Delete from CandidateSkills where CandidateId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.action_id#" /> and SkillId in (<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.DeleteSkills#" />)
+      </cfquery>      
+    </cfif>
+   <!---  <cfif ListLen(variables.CommonSkills) gt 0> 
+     <cfquery name="UpdateSkills" datasource="#application.datasource#">  
+        update CandidateSkills set 
+          ModifiedDate = <cfqueryparam cfsqltype="cf_sql_timestamp" value="#now()#">,
+          ModifiedBy = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#session.logId#" />,
+          Status = 0 
+          where CandidateId = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.CandidateId#" /> 
+          and SkillId in (<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.CommonSkills#" />)
+      </cfquery>
+    </cfif> --->
+     
+    success
+  </cffunction>
 <cffunction name="insertcandiate"  access="remote">
   <cfargument name="cn_fname" type="string" required="true">
   <cfargument name="cn_lname" type="string" required="true">
@@ -963,7 +1196,7 @@ success
   <cfquery name="candidate_details_pdf" datasource="#application.datasource#">  
 
   SELECT #session.listColumns#
-  FROM CandidateDetails  as A inner join JobVacancy as B on A.AppliedFor=B.JobVacancyId WHERE (A.Status=1)
+  FROM CandidateDetails  as A inner join JobVacancy as B  on A.AppliedFor=B.JobVacancyId left join Schedule as C on  A.CandidateId=C.CandidateId WHERE (A.Status=1) 
   <cfloop list="#variables.list_paramenters#" index="name">
   <cfset variables.count_index=(variables.count_index+1)>
   <cfif variables.canlist_search_true eq "1">
