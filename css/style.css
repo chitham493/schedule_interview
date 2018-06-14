@@ -175,7 +175,7 @@ section{
 	font-size: 15px;
 }
 #selectinground_div .select2-container{
-   display: block;
+ display: block;
 }
 
 @media screen and (max-width: 767px) {
@@ -314,7 +314,7 @@ label[for=date],label[for=time] {
 #view_candidate_modal_div .row-top{
 	margin-top:6px;
 }
-#table_lay2,#table_lay3{
+.table_lay2,.table_lay3{
 	display:none;
 }
 .top_tabelements{
@@ -381,3 +381,7 @@ label[for=date],label[for=time] {
 .schedule_tabs_div{
     margin-left: 3px !important;
 }    
+.review_candidate_form_div{
+    overflow-x: hidden;
+    overflow-y: auto;
+}

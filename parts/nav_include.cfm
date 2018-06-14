@@ -23,14 +23,22 @@
 			<ul  class="nav nav-pills nav-stacked">
 				<cfset variables.url_page="#listlast(cgi.script_name,"/")#">
 				<cfif session.user_type eq "1">
-					<li <cfif variables.url_page eq "home.cfm"> class="active" </cfif> ><a href="<cfoutput>#application.domain_name#</cfoutput>home.cfm">Candidate List</a></li>
-					<li ><a href="<cfoutput>#application.domain_name#</cfoutput>schedule/schedule_list.cfm">Schedule Interview</a></li>
-					<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_members.cfm">Add Panel Member</a></li>
-					<!--- <li ><a href="<cfoutput>#application.domain_name#</cfoutput>add_custom.html">Add Custom</a></li> --->
-					<li ><a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_list.cfm">Panel Management </a></li>
-					<li ><a href="<cfoutput>#application.domain_name#</cfoutput>job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a></li>
+					<li <cfif variables.url_page eq "home.cfm"> class="active" </cfif> >
+						<a href="<cfoutput>#application.domain_name#</cfoutput>home.cfm">Candidate List</a>
+					</li>
+					<li <cfif variables.url_page eq "schedule_list.cfm"> class="active" </cfif> >
+						<a href="<cfoutput>#application.domain_name#</cfoutput>schedule/schedule_list.cfm">Schedule Interview</a>
+					</li>
+					<li <cfif variables.url_page eq "panel_members.cfm"> class="active" </cfif> >
+						<a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_members.cfm">Add Panel Member</a>
+					</li>
+					<li <cfif variables.url_page eq "panel_list.cfm"> class="active" </cfif> >
+						<a href="<cfoutput>#application.domain_name#</cfoutput>panel/panel_list.cfm">Panel Management </a>
+					</li>
+					<li <cfif variables.url_page eq "job_vacancy_list.cfm"> class="active" </cfif>>
+						<a href="<cfoutput>#application.domain_name#</cfoutput>job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a>
+					</li>
 				</cfif>
-				
 			</ul>
 		</nav>
 	</div>

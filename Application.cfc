@@ -19,27 +19,27 @@ component{
 				session.error_login="Invalid Access";
 				location(application.domain_name&"index.cfm");
 			}			
-		}else{
-			
+			}else{
+				
 
-			if(session.user_type eq 2){
+				if(session.user_type eq 2){
 					if(filename=='index.cfm'){
-							location(application.domain_name&"login_panel/candidate_list.cfm");
+						location(application.domain_name&"login_panel/candidate_list.cfm");
 						}else{
-						
-							  file_restrict="candidate_list.cfm,logout.cfm,db2_database.cfc,schedule_list.cfc";
-								if(!listContains(file_restrict,filename)){
-									location(application.domain_name&"login_panel/candidate_list.cfm");
-								}
+							
+							file_restrict="candidate_list.cfm,logout.cfm,db2_database.cfc,schedule_list.cfc";
+							if(!listContains(file_restrict,filename)){
+								location(application.domain_name&"login_panel/candidate_list.cfm");
 							}
-					
-				}else{
+						}
+						
+						}else{
 
-			if(filename=='index.cfm'){
-				location(application.domain_name&"home.cfm");
-			}
-			}
+							if(filename=='index.cfm'){
+								location(application.domain_name&"home.cfm");
+							}
+						}
 
-		}
-	}
-}	
+					}
+				}
+			}	

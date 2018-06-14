@@ -6,7 +6,7 @@
        <cfinclude template="../parts/login_check.cfm">
    </head>
    <body>
-            <cfinclude template="../parts/modal_include.cfm">
+      <cfinclude template="../parts/modal_include.cfm">
       <div class="container-fluid" >
          <div  class="row content">
             <cfinclude template="../parts/nav_include.cfm">

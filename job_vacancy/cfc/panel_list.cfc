@@ -9,7 +9,6 @@
         <cfparam name="url.iDisplayLength" default="10" type="integer" />
         <cfparam name="url.sSearch" default="" type="string" />
         <cfparam name="url.iSortingCols" default="0" type="integer" />
-          
         <!--- Data set after filtering --->
         <cfquery datasource="#coldfusionDatasource#" name="qFiltered">
             SELECT #listColumns#
@@ -21,13 +20,11 @@
                 ORDER BY <cfloop from="0" to="#url.iSortingCols-1#" index="thisS"><cfif thisS is not 0>, </cfif>#listGetAt(listColumns,(url["iSortCol_"&thisS]+1))# <cfif listFindNoCase("asc,desc",url["sSortDir_"&thisS]) gt 0>#url["sSortDir_"&thisS]#</cfif> </cfloop>
             </cfif>
         </cfquery>
-          
         <!--- Total data set length --->
         <cfquery datasource="#coldfusionDatasource#" name="qCount">
             SELECT COUNT(#sIndexColumn#) as total
             FROM   #sTableName#  WHERE (status=1) 
         </cfquery>
-          
         <!---
             Output
          --->

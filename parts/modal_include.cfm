@@ -1,17 +1,22 @@
 <!--Modal for schedule_list_all-->   
-<div class="modal fade" id="review_candidate_user_modal" role="dialog">
-   <div class="modal-dialog modal-lg">
+<div class="modal fade" id="view_candidate_user_modal" role="dialog">
+   <div class="modal-dialog modal-md">
       <div class="modal-content">
          <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
             <h4 class="modal-title">View Schedule</h4>
          </div>
          <div class="modal-body">
-            <div class="modal-content review_candidate_form_div ">
-
-
+            <div class="view_candidate_schedule_div ">
             </div>
          </div>
+      </div>
+   </div>
+</div>
+<!--Modal for schedule_list_all-->   
+<div class="modal fade" id="review_candidate_user_modal" role="dialog">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content review_candidate_form_div ">
       </div>
    </div>
 </div>
@@ -61,9 +66,7 @@
             <h4 class="modal-title">Edit Job Vacancy</h4>
          </div>
          <div class="modal-body" id="jobvacancy_modal_div">
-
          </div>   
-
          <div class="modal-footer">  
          </div>
       </div>
@@ -79,9 +82,6 @@
                <h4 class="modal-title">Select Rounds</h4>
             </div>
             <div class="modal-body" id="selectinground_div">
-
-
-
             </div>  
             <div class="modal-footer">
                <div class="form-group col-md-12">
@@ -211,7 +211,6 @@
             </div>
             <div class="modal-body">
                <div class="row edit_panelmember_form_div">
-
                </div>
             </div>
             <div class="modal-footer">  
@@ -220,7 +219,6 @@
                </div> 
             </div>
          </form>   
-         
       </div>
    </div>
 </div>
@@ -317,7 +315,6 @@
          </div>
          <div class="modal-body">
             <div class="row edit_panel_form_div">
-
             </div>
          </div>
          <div class="modal-footer">  
@@ -341,9 +338,7 @@
                         <label for="usrname">Panel Name</label>
                         <input type="text" required class="form-control" name="panel_name" id="panel_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="Panel Name">
                      </div>
-
                   </div>
-
                   <div class="form-row">
                      <div class="form-group col-md-12">
                         <button type="submit" class="btn btn-primary">Add Panel</button>
@@ -398,14 +393,13 @@
                         <label for="psw">Applied For</label>
                         <cfset  applied_for = database.applied_for()>
                         <select  name="cn_applied_for" class="form-control" required>
-                         <option value="">--Please Select--</option>
-                         <cfoutput>
+                          <option value="">--Please Select--</option>
+                          <cfoutput>
                            <cfloop query="applied_for">
                               <option value="#JobVacancyId#">#JobPosition#</option>
                            </cfloop>
                         </cfoutput>
                      </select>
-
                   </div>
                </div>
                <div class="form-row">
@@ -517,9 +511,7 @@
             <h4 class="modal-title">Edit Candidate</h4>
          </div>
          <div class="modal-body" id="edit_candidate_modal">
-
          </div>   
-
          <div class="modal-footer">  
          </div>
       </div>
@@ -535,23 +527,8 @@
          </div>
          <div class="modal-body">
             <div class="row schedule_interview_form_div">
-
-  <div class="form-row">
-   
- 
-<div class="form-row">
- <div class="form-group col-md-4">
-  <label for="inter_pan"><h3>Round1: Aptitude</h3></label>
-</div>
-      <div class="form-group col-md-6">
-         <h3>Rahul's Review</h3>
-      </div>
-  </div>
-
-
-      </div>
+            </div>
          </div>
       </div>
    </div>
-</div>
 </div>

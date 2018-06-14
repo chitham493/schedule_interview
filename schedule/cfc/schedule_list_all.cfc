@@ -1,7 +1,7 @@
 <cfcomponent>
     <cffunction name="dataTable" access="remote" format="json">
         <cfset sTableName = "Schedule" />
-        <cfset listColumns = "ScheduleId,FIRSTNAME,ScheduleDate,ScheduleTime,JobPosition,Name,AppliedFor,JobVacancyId,next_schdule_status,Final_Round,Current_Status,CandidateId" />
+        <cfset listColumns = "CandidateId,FIRSTNAME,ScheduleDate,ScheduleTime,JobPosition,Name,AppliedFor,JobVacancyId,next_schdule_status,Final_Round,Current_Status,ScheduleId" />
         <cfset listColumns_query = "S.ScheduleId,C.CandidateId,C.FIRSTNAME,S.ScheduleDate,S.ScheduleTime,J.JobPosition,J.JobVacancyId,C.AppliedFor,S.Final_Round,IT.Name,S.next_schdule_status,S.Current_Status" />
         <cfset sIndexColumn = "C.CandidateId" />
         <cfset coldfusionDatasource = "#application.datasource#"/>
@@ -19,7 +19,6 @@
         <cfset list_columnlist_paramenters="">
         <cfset session.canlist_search_true="0">
         <cfset session.listColumns=variables.listColumns_query>
-        <!--- Data set after filtering --->
         <cfquery datasource="#coldfusionDatasource#" name="qFiltered" result="myResult">
            SELECT  Distinct #listColumns_query#
                 FROM #sTableName# S inner join InterviewRounds R on R.InterviewRoundId = S.InterviewRoundId inner join JobVacancy J 
@@ -57,8 +56,6 @@
                      <cfset list_columnlist_paramenters=ListAppend(list_columnlist_paramenters,"JobPosition")>
                  </cfif>
             </cfif>
-               
-
             <cfif url.iSortingCols gt 0>
                 ORDER BY <cfloop from="0" to="#url.iSortingCols-1#" index="thisS"><cfif thisS is not 0>, </cfif>#listGetAt(listColumns_query,(url["iSortCol_"&thisS]+1))# <cfif listFindNoCase("asc,desc",url["sSortDir_"&thisS]) gt 0>#url["sSortDir_"&thisS]#</cfif> </cfloop>
                 <cfelse>
@@ -66,7 +63,6 @@
         </cfquery>
         <cfset session.list_paramenters='#list_paramenters#'>
         <cfset session.list_columnlist_paramenters='#list_columnlist_paramenters#'>
-        <!--- Total data set length --->
         <cfquery datasource="#coldfusionDatasource#" name="qCount">
             SELECT COUNT(#sIndexColumn#) as total
             FROM   #sTableName# S inner join InterviewRounds R on R.InterviewRoundId = S.InterviewRoundId inner join JobVacancy J 
