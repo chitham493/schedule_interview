@@ -38,6 +38,14 @@
 					<li <cfif variables.url_page eq "job_vacancy_list.cfm"> class="active" </cfif>>
 						<a href="<cfoutput>#application.domain_name#</cfoutput>job_vacancy/job_vacancy_list.cfm">Job Vacancy Management </a>
 					</li>
+					<li <cfif variables.url_page eq "skills_list.cfm"> class="active" </cfif>>
+						<a href="<cfoutput>#application.domain_name#</cfoutput>skill/skills_list.cfm">Skills Management </a>
+					</li>
+					<li <cfif variables.url_page eq "interviewtypes_list.cfm"> class="active" </cfif>>
+						<a href="<cfoutput>#application.domain_name#</cfoutput>interviewtypes/interviewtypes_list.cfm">Interview Type Management </a>
+					</li>
+
+					
 				</cfif>
 			</ul>
 		</nav>

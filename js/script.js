@@ -1,6 +1,69 @@
+$('#table_selected_candidate').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "responsive": true,
+    "order": [[0, 'desc']],
+    "sAjaxSource": domain + 'schedule/cfc/selected_candidate.cfc?method=dataTable',
+    "lengthMenu": [
+        [5, 10, 25, 50],
+        [5, 10, 25, 50]
+    ],
+    "rowReorder": {
+        selector: 'td:nth-child(2)'
+    },
+    columns: [{
+            title: 'Id',
+            name: "CandidateId",
+            class: "candidate_column0"
+        },
+        {
+            title: 'Name',
+            name: "FIRSTNAME",
+            class: "candidate_column1"
+        },
+        {
+            title: 'Schdeule Date',
+            name: "ScheduleDate",
+            class: "candidate_column2"
+        },
+        {
+            title: 'Schdeule Time',
+            name: "ScheduleTime",
+            class: "candidate_column3"
+        },
+        {
+            title: 'Post Applied',
+            name: "JobPosition",
+            class: "candidate_column4"
+        },
+        {
+            title: 'Interview Round',
+            name: "Name",
+            class: "candidate_column4"
+        },
+        {
+            title: "Action",
+            orderable: false,
+            data: null,
+            class: "dt-head-center",
+            'render': function(data, type, row) {
+                //row[8]     next_schdule_status
+                //row[9]  Final_Round
+                if ((row[8] == 0) && (row[9] == 0) && (row[10] == 2)) {
+                    var schedule = '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return schedule_candidate(\'' + row[0] + '\',\'' + row[7] + '\')\" class=\"icon_vox \"><span class=\"material-icons\">assignment<\/span><\/a>';
+                } else {
+                    var schedule = '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Schedule\" onclick=\"return false\" class=\"icon_vox schedule_active\"><span class=\"material-icons\">assignment<\/span><\/a>';
+                }
+                return schedule + '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\"  data-column=\"' + row[0] + '\" title=\"View\" onclick=\"return view_schedule(\'' + row[11] + '\',\'' + row[0] + '\')\"  class=\"icon_vox view_candidate\"><span class=\"material-icons\">pageview<\/span><\/a>\r\n';
+            }
+        }
+    ]
+
+});
 $('#table_schedule_candidate').DataTable({
     "bProcessing": true,
     "bServerSide": true,
+    "order": [[0, 'desc']],
     "responsive": true,
     "sAjaxSource": domain + 'schedule/cfc/schedule_candidate.cfc?method=dataTable',
     "lengthMenu": [
@@ -63,6 +126,7 @@ $('#table_schedule_all').DataTable({
     "bProcessing": true,
     "bServerSide": true,
     "responsive": true,
+    "order": [[0, 'desc']],
     "sAjaxSource": domain + 'schedule/cfc/schedule_list_all.cfc?method=dataTable',
     "lengthMenu": [
         [5, 10, 25, 50],
@@ -191,6 +255,7 @@ $('#table_lay_selected').DataTable({
     "bProcessing": true,
     "bServerSide": true,
     "responsive": true,
+    "order": [[4, 'desc']],
     "sAjaxSource": domain + 'login_panel/cfc/schedule_list.cfc?method=dataTable',
     "lengthMenu": [
         [5, 10, 25, 50],
@@ -329,7 +394,7 @@ $('#job_vacancy_table').DataTable({
         }
     ]
 });
-$("#selecting_skills_modal").on("submit", "#selecting_skills_form", function(e) {
+$("#selecting_interviewtypes_modal").on("submit", "#selecting_interviewtypes_form", function(e) {
     e.preventDefault();
     var formData = new FormData(this);
     $.ajax({
@@ -1119,3 +1184,231 @@ function tabs_select(tabs_select) {
 
     $("div[class='table table_lay" + tabs_select + "']").css("display","block");
 }
+$('#skills_list').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "responsive": true,
+    "sAjaxSource": domain + 'skill/cfc/skills_list.cfc?method=dataTable',
+    "lengthMenu": [
+        [5, 10, 25, 50],
+        [5, 10, 25, 50]
+    ],
+    "rowReorder": {
+        selector: 'td:nth-child(2)'
+    },
+    columns: [
+
+        {
+            title: 'Id',
+            name: "PanelId",
+            class: "panel_list_column"
+        },
+        {
+            title: 'Name',
+            name: "Name",
+            class: "panel_list_column"
+        },
+        {
+            title: "Action",
+            orderable: false,
+            data: null,
+            class: "dt-head-center",
+            'render': function(data, type, row) {
+
+                return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_skills(\'' + row[0] + '\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" onclick=\"return delete_skills(\'' + row[0] + '\')\"  data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"' + row[0] + '\" ><span class=\"material-icons\">delete<\/span><\/a>'
+            }
+        }
+    ]
+});
+$(".add_skills_but").click(function() {
+    $("#skilladd_modal").modal();
+});
+$(".add_skills_form_div").on("submit", "#add_skills_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=insertskills",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+            result = $.trim(result);
+            if (result == "success") {
+                $(".modal-content").html("<center><div class='msg_header'><h3>Insert Successfully!!!</h3></div></center>");
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            }
+        }
+    });
+
+});
+function delete_skills(id) {
+    $("#delete_modal_skills").modal();
+    $("#action_id").val(id);
+    $("#action_page").val("delete_skills");
+}
+$("#confirm_delete_skills").click(function() {
+    var action_id = $("#action_id").val();
+    $.ajax({
+        url: domain + "cfc/database.cfc?method=delete_skills",
+        type: "POST",
+        data: {
+            action_id: parseInt(action_id)
+        },
+        success: function(html) {
+            alert("success");
+            location.reload();
+        }
+    });
+});
+function edit_skills(id) {
+    $.ajax({
+        url: domain + "cfc/database.cfc?method=edit_skills",
+        type: "POST",
+        data: {
+            action_id: parseInt(id)
+        },
+        success: function(html) {
+            $(".edit_skills_form_div").html(html);
+            $("#skillsedit_modal").modal();
+        }
+    });
+}
+$(".edit_skills_form_div").on("submit", "#edit_skills_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=editskills_save",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+            result = $.trim(result);
+            if (result == "success") {
+                $(".modal-content").html("<center><div class='msg_header'><h3>Edited Successfully!!!</h3></div></center>");
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            }
+        }
+    });
+});
+$('#interview_types_list').DataTable({
+    "bProcessing": true,
+    "bServerSide": true,
+    "responsive": true,
+    "sAjaxSource": domain + 'interviewtypes/cfc/interviewtypes_list.cfc?method=dataTable',
+    "lengthMenu": [
+        [5, 10, 25, 50],
+        [5, 10, 25, 50]
+    ],
+    "rowReorder": {
+        selector: 'td:nth-child(2)'
+    },
+    columns: [
+
+        {
+            title: 'Id',
+            name: "PanelId",
+            class: "panel_list_column"
+        },
+        {
+            title: 'Name',
+            name: "Name",
+            class: "panel_list_column"
+        },
+        {
+            title: "Action",
+            orderable: false,
+            data: null,
+            class: "dt-head-center",
+            'render': function(data, type, row) {
+
+                return '<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"Edit\"  onclick=\"return edit_interview_types(\'' + row[0] + '\')\" class=\"icon_vox can_list cl_edit\"><span class=\"material-icons\" >edit<\/span><\/a>\r\n<a href=\"#\" data-toggle=\"tooltip\" onclick=\"return delete_interview_types(\'' + row[0] + '\')\"  data-placement=\"bottom\" title=\"Delete\" class=\"icon_vox delete_candidate\" data-column=\"' + row[0] + '\" ><span class=\"material-icons\">delete<\/span><\/a>'
+            }
+        }
+    ]
+});
+$(".add_interviewtypes_form_div").on("submit", "#add_interviewtypes_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=insertinterviewtypes",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+            result = $.trim(result);
+            if (result == "success") {
+                $(".modal-content").html("<center><div class='msg_header'><h3>Insert Successfully!!!</h3></div></center>");
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            }
+        }
+    });
+
+});
+$(".add_interview_types_but").click(function() {
+    $("#interviewtypesadd_modal").modal();
+});
+function delete_interview_types(id) {
+    $("#delete_modal_interviewtypes").modal();
+    $("#action_id").val(id);
+    $("#action_page").val("delete_interviewtypes");
+}
+$("#confirm_delete_interviewtypes").click(function() {
+    var action_id = $("#action_id").val();
+    $.ajax({
+        url: domain + "cfc/database.cfc?method=delete_interviewtypes",
+        type: "POST",
+        data: {
+            action_id: parseInt(action_id)
+        },
+        success: function(html) {
+            alert("success");
+            location.reload();
+        }
+    });
+});
+function edit_interview_types(id) {
+    $.ajax({
+        url: domain + "cfc/database.cfc?method=edit_interviewtypes",
+        type: "POST",
+        data: {
+            action_id: parseInt(id)
+        },
+        success: function(html) {
+            $(".edit_interviewtypes_form_div").html(html);
+            $("#interviewtypesedit_modal").modal();
+        }
+    });
+}
+$(".edit_interviewtypes_form_div").on("submit", "#edit_interviewtypes_form", function(e) {
+    e.preventDefault();
+    var formData = new FormData(this);
+    $.ajax({
+        type: 'POST',
+        url: domain + "cfc/database.cfc?method=editinterviewtypes_save",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+            result = $.trim(result);
+            if (result == "success") {
+                $(".modal-content").html("<center><div class='msg_header'><h3>Edited Successfully!!!</h3></div></center>");
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
+            }
+        }
+    });
+});

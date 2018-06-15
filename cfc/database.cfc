@@ -3,94 +3,96 @@
     <cfargument name="schedule_id" type="string" required="true">
     <cfargument name="candidate_id" type="string" required="true">
     <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
-      <cfquery datasource="#application.datasource#" name="schedule_view_rounds">
-        select IT.Name Interview_type,S.ScheduleId ScheduleId,S.ScheduleId ScheduleId,P.PanelId PanelId,P.PanelId PanelId,S.next_schdule_status,S.Current_Status,S.Total_Mark,S.Final_Result,S.Final_Round from Schedule S INNER join InterviewRounds IR on IR.InterviewRoundId=S.InterviewRoundId  Inner join InterviewTypes IT on IT.InterviewTypeId=IR.InterviewTypeId Inner join Panel P on P.PanelId=S.PanelId where CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> ORDER BY S.ScheduleId ASC
-      </cfquery>
-    <cfoutput>
-      <cfloop query="schedule_view_rounds">
-        <cfset variables.schedule_id= #ScheduleId#>
-        <cfset variables.Total_Mark= #Total_Mark#>
-        <cfset variables.Current_Status= #Current_Status#>
-        <cfset variables.Final_Round= #Final_Round#>
-        <cfset variables.Final_Result= #Final_Result#>
-        <cfset variables.Counts_exist= 0>
-        <div class="row">
-          <div class="col-md-12">
-            <center><label><h4>Round1: #Interview_type#</h4></label></center>
-            <cfif #Final_Round# neq '' AND #Final_Round# neq '0'>
-              <center><label><h4>(Final Round)</h4></label></center>
-            </cfif>
-          </div>
-        </div>
-        <cfif #Current_Status# eq "4">
-          <cfset variables.Join_Review="LEFT">
-          <cfset variables.Status="">
-          <cfelse>
-            <cfset variables.Join_Review="RIGHT">
+    <cfquery datasource="#application.datasource#" name="schedule_view_rounds">
+    select IT.Name Interview_type,S.ScheduleId ScheduleId,S.ScheduleId ScheduleId,P.PanelId PanelId,P.PanelId PanelId,S.next_schdule_status,S.Current_Status,S.Total_Mark,S.Final_Result,S.Final_Round from Schedule S INNER join InterviewRounds IR on IR.InterviewRoundId=S.InterviewRoundId  Inner join InterviewTypes IT on IT.InterviewTypeId=IR.InterviewTypeId Inner join Panel P on P.PanelId=S.PanelId where CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> ORDER BY S.ScheduleId ASC
+  </cfquery>
+  <cfoutput>
+   <cfset variables.Counts_exist_round= 0>
+   <cfset Overall_Score_count=0>
+   <cfset Overall_Score=0>
+   <cfloop query="schedule_view_rounds">
+    <cfset variables.schedule_id= #ScheduleId#>
+    <cfset variables.Total_Mark= #Total_Mark#>
+    <cfset variables.Current_Status= #Current_Status#>
+    <cfset variables.Final_Round= #Final_Round#>
+    <cfset variables.Final_Result= #Final_Result#>
+    <cfset variables.Counts_exist= 0>
+    <div class="row">
+      <div class="col-md-12">
+        <center><label><h4>Round#Counts_exist_round+1#: #Interview_type#</h4></label></center>
+        <cfif #Final_Round# neq '' AND #Final_Round# neq '0'>
+          <center><label><h4>(Final Round)</h4></label></center>
         </cfif>
-          <cfquery datasource="#application.datasource#" name="schedule_view_rounds_UserDetails" result="schedule_view_rounds_UserDetailsrs">
-            select UD.FirstName FirstName,UD.LastName LastName,R.Comments as Comments,R.ReviewId as ReviewId ,R.ReviewId as ReviewId  from Panel P inner join PanelMembers PM on PM.PanelId=P.PanelId INNER join UserDetails UD on PM.UserId=UD.UserId #variables.Join_Review# JOIN Review R on UD.UserId=R.ReviewedBy AND R.ScheduleId='#variables.schedule_id#'  where P.PanelId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#PanelId#" /> AND PM.Status=1   ORDER BY P.PanelId ASC
-          </cfquery>
-          <cfset Overall_Score_count=0>
-          <cfset Overall_Score=0>
-          <cfloop query="schedule_view_rounds_UserDetails">
-          <cfset Overall_Score_count=Overall_Score_count+1>
-          <div class="row">
-            <div class="form-group col-md-12">
-              <h4>#FirstName# #LastName#'s Review:</h4>
-              <cfif ReviewId eq "">
-                <div class="alert alert-danger">  Waiting for Review</div>
-                <cfelse>
-                  <cfset variables.Counts_exist=variables.Counts_exist+1>
-                  <cfset variables.review_id=#ReviewId#>
-                  <cfquery datasource="#application.datasource#" name="schedule_view_rounds_Skills" result="schedule_view_rounds_SkillsRs">
-                    select RS.Score,SK.Name from RateSkills RS inner join Skills SK on SK.SkillId=RS.SkillId WHERE RS.ReviewId=#variables.review_id#
-                  </cfquery>
-                  Comment:#Comments#<br>
-                  <cfset variables.Counts_exist_skills= 0>
-                  <cfset Counts_exist_skills_score=0>
-                  &nbsp;&nbsp;&nbsp;
-                  <cfloop query="schedule_view_rounds_Skills">#Name#:#Score#/10 
-                    <cfset Counts_exist_skills=Counts_exist_skills+1>
-                    <cfset Counts_exist_skills_score=Counts_exist_skills_score+#Score#>
-                  </cfloop> 
-                  <div class="form-group col-md-12">
-                    <cfset Counts_exist_skills_score_total=Counts_exist_skills_score/Counts_exist_skills>
-                    <cfset Overall_Score=Overall_Score+Counts_exist_skills_score_total>
-                    Total:#Counts_exist_skills_score_total#/10
-                  </div> 
-              </cfif>
-            </div> 
-          </div>
-        </cfloop>
-      </cfloop>
-    </cfoutput>
-    <cfif #variables.Current_Status# eq "4">
-      <cfif #schedule_view_rounds_UserDetailsrs.RecordCount# eq variables.Counts_exist>
-        <center> <h4>OverAll Total:&nbsp<cfoutput>#Overall_Score#/10</cfoutput></h4> </center>
-        <div class="row">
-          <div class="form-group col-md-12">
-            <center> 
-              <input type="radio" name="result_candidate" onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','1','<cfoutput>#variables.Overall_Score#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')" value="1">OnHold&nbsp;
-              <input value="3"  onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','3','<cfoutput>#variables.Overall_Score#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')"  type="radio" name="result_candidate">Rejected&nbsp;
-              <input type="radio"  onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','2','<cfoutput>#variables.Overall_Score#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')"   value="2"  name="result_candidate">Selected 
-            </center>
-          </div> 
-        </div>
-        <cfelse>
-         <div class="alert alert-danger">Waiting for OverAll Score</div> 
-       </cfif> 
-       <cfelse>
-        <div class="row">
-          <div class="form-group col-md-12">
-            <cfquery datasource="#application.datasource#" name="status_tabs" result="status_tabsrs">
-             select * from status where statusid=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.Current_Status#" />
-            </cfquery>
-            <center> <h4>Status:&nbsp<cfoutput>#status_tabs.Title#</cfoutput></h4> </center>
-            <center> <h4>OverAll Total:&nbsp;<cfoutput>#variables.Total_Mark#/10</cfoutput></h4> </center>
-          </div> 
       </div>
-    </cfif> 
+    </div>
+    <cfif #Current_Status# eq "4">
+      <cfset variables.Join_Review="LEFT">
+      <cfset variables.Status="">
+      <cfelse>
+        <cfset variables.Join_Review="RIGHT">
+      </cfif>
+      <cfquery datasource="#application.datasource#" name="schedule_view_rounds_UserDetails" result="schedule_view_rounds_UserDetailsrs">
+      select UD.FirstName FirstName,UD.LastName LastName,R.Comments as Comments,R.ReviewId as ReviewId ,R.ReviewId as ReviewId  from Panel P inner join PanelMembers PM on PM.PanelId=P.PanelId INNER join UserDetails UD on PM.UserId=UD.UserId #variables.Join_Review# JOIN Review R on UD.UserId=R.ReviewedBy AND R.ScheduleId='#variables.schedule_id#'  where P.PanelId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#PanelId#" /> AND PM.Status=1   ORDER BY P.PanelId ASC
+    </cfquery>
+
+    <cfloop query="schedule_view_rounds_UserDetails">
+      <cfset Overall_Score_count=Overall_Score_count+1>
+      <div class="row">
+        <div class="form-group col-md-12">
+          <h4>#FirstName# #LastName#'s Review:</h4>
+          <cfif ReviewId eq "">
+            <div class="alert alert-danger">  Waiting for Review</div>
+            <cfelse>
+              <cfset variables.Counts_exist=variables.Counts_exist+1>
+              <cfset variables.review_id=#ReviewId#>
+              <cfquery datasource="#application.datasource#" name="schedule_view_rounds_Skills" result="schedule_view_rounds_SkillsRs">
+              select RS.Score,SK.Name from RateSkills RS inner join Skills SK on SK.SkillId=RS.SkillId WHERE RS.ReviewId=#variables.review_id#
+            </cfquery>
+            Comment:#Comments#<br>
+            <cfset variables.Counts_exist_skills= 0>
+            <cfset Counts_exist_skills_score=0>
+            &nbsp;&nbsp;&nbsp;
+            <cfloop query="schedule_view_rounds_Skills">#Name#:#Score#/10 
+            <cfset Counts_exist_skills=Counts_exist_skills+1>
+            <cfset Counts_exist_skills_score=Counts_exist_skills_score+#Score#>
+          </cfloop> 
+          <div class="form-group col-md-12">
+            <cfset Counts_exist_skills_score_total=Counts_exist_skills_score/Counts_exist_skills>
+            <cfset Overall_Score=Overall_Score+Counts_exist_skills_score_total>
+            Total:#Counts_exist_skills_score_total#/10
+          </div> 
+        </cfif>
+      </div> 
+    </div>
+  </cfloop>
+</cfloop>
+</cfoutput>
+<cfif #variables.Current_Status# eq "4">
+  <cfif #schedule_view_rounds_UserDetailsrs.RecordCount# eq variables.Counts_exist>
+    <center> <h4>OverAll Total:&nbsp<cfoutput>#Overall_Score/Overall_Score_count#/10</cfoutput></h4> </center>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <center> 
+          <input type="radio" name="result_candidate" onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','1','<cfoutput>#variables.Overall_Score/variables.Overall_Score_count#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')" value="1">OnHold&nbsp;
+          <input value="3"  onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','3','<cfoutput>#variables.Overall_Score/variables.Overall_Score_count#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')"  type="radio" name="result_candidate">Rejected&nbsp;
+          <input type="radio"  onclick="return changersstatus('<cfoutput>#variables.schedule_id#</cfoutput>','2','<cfoutput>#variables.Overall_Score/variables.Overall_Score_count#</cfoutput>','<cfoutput>#variables.Final_Round#</cfoutput>')"   value="2"  name="result_candidate">Selected 
+        </center>
+      </div> 
+    </div>
+    <cfelse>
+     <div class="alert alert-danger">Waiting for OverAll Score</div> 
+   </cfif> 
+   <cfelse>
+    <div class="row">
+      <div class="form-group col-md-12">
+        <cfquery datasource="#application.datasource#" name="status_tabs" result="status_tabsrs">
+        select * from status where statusid=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.Current_Status#" />
+      </cfquery>
+      <center> <h4>Status:&nbsp<cfoutput>#status_tabs.Title#</cfoutput></h4> </center>
+      <center> <h4>OverAll Total:&nbsp;<cfoutput>#variables.Total_Mark#/10</cfoutput></h4> </center>
+    </div> 
+  </div>
+</cfif> 
 </cffunction>
 <cffunction name="change_statusschedule" access="remote">
   <cfargument name="schedule_id" type="string" required="true">
@@ -99,16 +101,16 @@
   <cfargument name="Final_Round_status" type="string" required="true">
   <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
   <cfquery name="panel_name_editquery" datasource="#application.datasource#"  result="myResult">
-    UPDATE Schedule
-    SET Current_Status=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.status#" />
-    ,ModifiedDate ='#variables.todaydate#'
-    <cfif arguments.Final_Round_status eq '1'>
-      ,Total_Mark=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Total_Mark#">
-      ,Final_Result=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.status#">
-    </cfif>
-    WHERE ScheduleId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_id#" />
-  </cfquery>
-  <cfoutput>success</cfoutput>
+  UPDATE Schedule
+  SET Current_Status=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.status#" />
+  ,ModifiedDate ='#variables.todaydate#'
+  <cfif arguments.Final_Round_status eq '1'>
+  ,Total_Mark=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Total_Mark#">
+  ,Final_Result=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.status#">
+  </cfif>
+  WHERE ScheduleId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_id#" />
+</cfquery>
+<cfoutput>success</cfoutput>
 </cffunction> 
 <cffunction access="remote" name="add_schedulecandidate_form">
   <cfargument name="candidate_id" type="string" required="true">
@@ -117,93 +119,93 @@
   <cfargument name="schedule_interview_type" type="string" required="true">
   <cfargument name="schedule_interview_panel" type="string" required="true">
   <cfif (structKeyExists(arguments, "final_rounds")) eq 1> 
-     <cfset variables.final_rounds_val='1'>
-     <cfelse>
-      <cfset variables.final_rounds_val='0'>
+   <cfset variables.final_rounds_val='1'>
+   <cfelse>
+    <cfset variables.final_rounds_val='0'>
   </cfif>
   <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
   <cfquery name="status_change" datasource="#application.datasource#" result="stausrs">
-    Update Schedule Set next_schdule_status=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1"> where CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#">
-  </cfquery>
-  <cfquery name="add_schedulecandidate_form_query" datasource="#application.datasource#" result="schedule_rs">
-    INSERT INTO [Schedule]
-    (
-      [CandidateId],
-      [InterviewRoundId],
-      [ScheduleDate],
-      [ScheduleTime],
-      [PanelId],
-      [CreatedDate],
-      [ModifiedDate],
-      [Status],
-      [Final_ROUND],
-      [Current_Status],
-      [Total_Mark],
-      [Final_Result]
-      )VALUES
-    (
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_type#">,
-      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_date#">,
-      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_time#">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#">,
-      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
-      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.final_rounds_val#">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="4">,
-      <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="0">,
-      <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0">
-      )
-  </cfquery>
-  <cfquery name="getPanelMembersList"  datasource="#application.datasource#"> 
-    SELECT B.* from [PanelMembers] as A inner join UserDetails as B on A.[UserId]=B.[UserId] where PanelId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#" /> AND A.Status=1 AND B.Status=1 
-  </cfquery>
-  <cfquery name="getcandidate_details"  datasource="#application.datasource#"> 
-    SELECT * from CandidateDetails where CandidateId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> AND Status=1 
-  </cfquery>
-  <cfset Candidate_Name = getcandidate_details.FirstName&getcandidate_details.LastName>
-  <cfmail query="getcandidate_details" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:Interview call" type="html">
-    <cfmailpart type="html">
-     <html> 
-       <head>
-        <style type="text/css"> 
-         body { 
-         font-family:sans-serif;
-         font-size:12px;
-         color:navy;
-         }
-       </style> 
-       </head> 
-       <body>
-         <p>Dear #FirstName# #LastName#,</p>
-         <p>You Have been Short Listed for an Interview for you job position on #arguments.schedule_date# #arguments.schedule_time#.</p>
-         <p>Thanks Regards,<br>HR Manager</p>
-       </body>
-     </html>
-   </cfmailpart>
-  </cfmail>
-  <cfmail query="getPanelMembersList" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:New Interview Schedules" type="html">
-    <cfmailpart type="html">
-     <html> 
-       <head>
-        <style type="text/css"> 
-         body { 
-         font-family:sans-serif;
-         font-size:12px;
-         color:navy;
-         }
-       </style> 
-       </head> 
-       <body>
-         <p>Dear #FirstName# #LastName#,</p>
-         <p>#variables.Candidate_Name# Has been Schedule for an interview  on #arguments.schedule_date# #arguments.schedule_time#.</p>
-         <p>Thanks Regards,<br>HR Manager</p>
-       </body>
-     </html>
-   </cfmailpart>
-  </cfmail>
-  <cfoutput>success</cfoutput>
+  Update Schedule Set next_schdule_status=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1"> where CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#">
+</cfquery>
+<cfquery name="add_schedulecandidate_form_query" datasource="#application.datasource#" result="schedule_rs">
+INSERT INTO [Schedule]
+(
+  [CandidateId],
+  [InterviewRoundId],
+  [ScheduleDate],
+  [ScheduleTime],
+  [PanelId],
+  [CreatedDate],
+  [ModifiedDate],
+  [Status],
+  [Final_ROUND],
+  [Current_Status],
+  [Total_Mark],
+  [Final_Result]
+  )VALUES
+(
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_type#">,
+  <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_date#">,
+  <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.schedule_time#">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#">,
+  <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+  <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#variables.todaydate#">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="1">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#variables.final_rounds_val#">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="4">,
+  <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="0">,
+  <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0">
+  )
+</cfquery>
+<cfquery name="getPanelMembersList"  datasource="#application.datasource#"> 
+SELECT B.* from [PanelMembers] as A inner join UserDetails as B on A.[UserId]=B.[UserId] where PanelId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.schedule_interview_panel#" /> AND A.Status=1 AND B.Status=1 
+</cfquery>
+<cfquery name="getcandidate_details"  datasource="#application.datasource#"> 
+SELECT * from CandidateDetails where CandidateId =<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> AND Status=1 
+</cfquery>
+<cfset Candidate_Name = getcandidate_details.FirstName&getcandidate_details.LastName>
+<cfmail query="getcandidate_details" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:Interview call" type="html">
+  <cfmailpart type="html">
+   <html> 
+     <head>
+      <style type="text/css"> 
+       body { 
+       font-family:sans-serif;
+       font-size:12px;
+       color:navy;
+       }
+     </style> 
+   </head> 
+   <body>
+     <p>Dear #FirstName# #LastName#,</p>
+     <p>You Have been Short Listed for an Interview for you job position on #arguments.schedule_date# #arguments.schedule_time#.</p>
+     <p>Thanks Regards,<br>HR Manager</p>
+   </body>
+   </html>
+ </cfmailpart>
+</cfmail>
+<cfmail query="getPanelMembersList" from="hr@tecnversantinc.com" to="#Email#" subject="Techversant:New Interview Schedules" type="html">
+  <cfmailpart type="html">
+   <html> 
+     <head>
+      <style type="text/css"> 
+       body { 
+       font-family:sans-serif;
+       font-size:12px;
+       color:navy;
+       }
+     </style> 
+   </head> 
+   <body>
+     <p>Dear #FirstName# #LastName#,</p>
+     <p>#variables.Candidate_Name# Has been Schedule for an interview  on #arguments.schedule_date# #arguments.schedule_time#.</p>
+     <p>Thanks Regards,<br>HR Manager</p>
+   </body>
+   </html>
+ </cfmailpart>
+</cfmail>
+<cfoutput>success</cfoutput>
 </cffunction>
 <cffunction access="remote" name="schedule_candidate_form" returntype="any" returnFormat="json"> 
   <cfargument name="candidate_id" type="string" required="true">
@@ -223,8 +225,8 @@
     <div class="form-group col-md-4">
       <input required type="text" class="form-control" name="schedule_time" id="schedule_time">
     </div>
-   </div>
-   <div class="form-row">
+  </div>
+  <div class="form-row">
    <div class="form-group col-md-4">
     <label for="inter_pan">Interview Panel:</label>
   </div>
@@ -238,8 +240,8 @@
        </cfloop>
      </cfoutput>
    </select>
-  </div>
-  </div>
+ </div>
+</div>
 <div class="form-row">
  <div class="form-group col-md-4">
   <label for="inter_pan">Interview Round:</label>
@@ -247,20 +249,20 @@
 <div class="form-group col-md-6">
   <cfset  interview_type = interview_type(arguments.candidate_id,arguments.job_id)>
   <cfquery  name="interview_type_check" datasource="#application.datasource#" result="interview_type_checkrs">
-    select IR.InterviewRoundId as InterviewTypeId from schedule S inner join InterviewRounds IR on S.InterviewRoundId=IR.InterviewRoundId inner join InterviewTypes IT on IR.InterviewTypeId=IT.InterviewTypeId where S.CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" />
-  </cfquery>
-  <cfset InterviewTypeId_array=ArrayToList(ValueArray(interview_type_check,"InterviewTypeId"))>
-  <label for="inter_pan">Final Round:</label><input type="checkbox" name="final_rounds">
-  <select  class="form-control" id="schedule_interview_type" name="schedule_interview_type" required>
-    <option>--Please Select--</option>
-    <cfoutput> 
-      <cfloop query="interview_type">
-        <cfif ListContains(#InterviewTypeId_array#,#InterviewRoundId#) neq 1>
-          <option value="#InterviewRoundId#">#Name#</option>
-        </cfif>
-      </cfloop>
-    </cfoutput>
-  </select>
+  select IR.InterviewRoundId as InterviewTypeId from schedule S inner join InterviewRounds IR on S.InterviewRoundId=IR.InterviewRoundId inner join InterviewTypes IT on IR.InterviewTypeId=IT.InterviewTypeId where S.CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" />
+</cfquery>
+<cfset InterviewTypeId_array=ArrayToList(ValueArray(interview_type_check,"InterviewTypeId"))>
+<label for="inter_pan">Final Round:</label><input type="checkbox" name="final_rounds">
+<select  class="form-control" id="schedule_interview_type" name="schedule_interview_type" required>
+  <option>--Please Select--</option>
+  <cfoutput> 
+    <cfloop query="interview_type">
+      <cfif ListContains(#InterviewTypeId_array#,#InterviewRoundId#) neq 1>
+        <option value="#InterviewRoundId#">#Name#</option>
+      </cfif>
+    </cfloop>
+  </cfoutput>
+</select>
 </div>
 </div>
 <div class="form-row">
@@ -905,6 +907,19 @@ update JobVacancy Set JobPosition=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value
 </cfquery>
 <cfoutput>success</cfoutput>
 </cffunction>
+<cffunction name="insertskills" access="remote">
+  <cfargument name="Skill_name" type="string" required="true">
+  <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+  <cfquery name="insertpanel" datasource="#application.datasource#"  result="myResult">  
+  INSERT INTO Skills (Name,CreateDate,ModifiedDate,Status)
+  VALUES
+  (<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.Skill_name#" />,
+    '#variables.todaydate#',
+    '#variables.todaydate#',
+    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="1" />);
+</cfquery>
+<cfoutput>success</cfoutput>
+</cffunction>
 <cffunction name="delete_candidate" access="remote">
   <cfargument name="action_id" type="INTEGER" required="true">
   <cfquery name="delete_candidate" datasource="#application.datasource#" result="myResult">  
@@ -1338,4 +1353,101 @@ success
 </cfquery>
 <cfreturn skills_list>
 </cffunction>
+<cffunction name="delete_skills" access="remote">
+  <cfargument name="action_id" type="INTEGER" required="true">
+  <cfquery name="delete_skills" datasource="#application.datasource#" result="myResult">  
+  UPDATE Skills SET Status = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0" /> where SkillId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
+</cfquery>
+<cfreturn myResult.RECORDCOUNT>
+</cffunction>
+<cffunction name="edit_skills" access="remote">
+  <cfargument name="action_id" type="string" required="true">
+  <cfquery name="edit_skills" datasource="#application.datasource#">
+  select * from Skills where SkillId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
+</cfquery>
+<cfoutput query="edit_skills">
+  <form id="edit_skills_form" action="" >
+    <div class="form-row">
+     <div class="form-group col-md-12">
+      <label for="usrname">skills Name</label>
+      <input type="text" required class="form-control" name="skills_name" id="skills_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" value="#Name#" placeholder="skills Name">
+      <input type="hidden"  name="skills_id" value="#SkillId#">
+    </div>
+
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+     <button type="submit" class="btn btn-primary">Edit Skills</button>
+   </div>
+ </div>
+</form>
+</cfoutput>
+</cffunction>
+<cffunction name="editskills_save" access="remote">
+  <cfargument name="skills_id" type="string" required="true">
+  <cfargument name="skills_name" type="string" required="true">
+  <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+  <cfquery name="skills_name_editquery" datasource="#application.datasource#"  result="myResult">
+  UPDATE skills
+  SET Name = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.skills_name#" />
+  ,ModifiedDate ='#variables.todaydate#'
+  WHERE skillId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.skills_id#" />
+</cfquery>
+<cfoutput>success</cfoutput>
+</cffunction> 
+<cffunction name="insertinterviewtypes" access="remote">
+  <cfargument name="interviewtypes_name" type="string" required="true">
+  <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+  <cfquery name="insertpanel" datasource="#application.datasource#"  result="myResult">  
+  INSERT INTO InterviewTypes (Name,CreatedDate,ModifiedDate,Status)
+  VALUES
+  (<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.interviewtypes_name#" />,
+    '#variables.todaydate#',
+    '#variables.todaydate#',
+    <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="1" />);
+</cfquery>
+<cfoutput>success</cfoutput>
+</cffunction>
+<cffunction name="delete_interviewtypes" access="remote">
+  <cfargument name="action_id" type="INTEGER" required="true">
+  <cfquery name="delete_interviewtypes" datasource="#application.datasource#" result="myResult">  
+    UPDATE InterviewTypes SET Status = <cfqueryparam cfsqltype="CF_SQL_INTEGER" value="0" /> where InterviewTypeId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
+  </cfquery>
+<cfreturn myResult.RECORDCOUNT>
+</cffunction>
+<cffunction name="edit_interviewtypes" access="remote">
+  <cfargument name="action_id" type="string" required="true">
+  <cfquery name="edit_interviewtypes" datasource="#application.datasource#">
+  select * from interviewtypes where InterviewTypeId=<cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.action_id#" />
+</cfquery>
+<cfoutput query="edit_interviewtypes">
+  <form id="edit_interviewtypes_form" action="" >
+    <div class="form-row">
+     <div class="form-group col-md-12">
+      <label for="usrname">Interviewtypes Name</label>
+      <input type="text" required class="form-control" name="interviewtypes_name" id="interviewtypes_name" pattern=".{3,35}" title="3 to 35 characters" value="#Name#" placeholder="interviewtypes Name">
+      <input type="hidden"  name="interviewtypes_id" value="#InterviewTypeId#">
+    </div>
+
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+     <button type="submit" class="btn btn-primary">Edit InterviewTypes</button>
+   </div>
+ </div>
+</form>
+</cfoutput>
+</cffunction>
+<cffunction name="editinterviewtypes_save" access="remote">
+  <cfargument name="interviewtypes_id" type="string" required="true">
+  <cfargument name="interviewtypes_name" type="string" required="true">
+  <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
+  <cfquery name="interviewtypes_name_editquery" datasource="#application.datasource#"  result="myResult">
+  UPDATE interviewtypes
+  SET Name = <cfqueryparam cfsqltype="CF_SQL_VARCHAR" value="#arguments.interviewtypes_name#" />
+  ,ModifiedDate ='#variables.todaydate#'
+  WHERE InterviewTypeId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.interviewtypes_id#" />
+</cfquery>
+<cfoutput>success</cfoutput>
+</cffunction> 
 </cfcomponent>

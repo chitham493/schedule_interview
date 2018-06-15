@@ -532,3 +532,131 @@
       </div>
    </div>
 </div>
+<!-- Modal For Skill Add-->
+<div class="modal fade" id="skilladd_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add Skills</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row add_skills_form_div">
+               <form id="add_skills_form" action="" >
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <label for="usrname">Skill Name</label>
+                        <input type="text" required class="form-control" name="Skill_name" id="Skill_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="Skill Name">
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary">Add Skill</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+         <div class="modal-footer">  
+         </div>
+      </div>
+   </div>
+</div>
+<!--Modal for Delete skills -->   
+<div class="modal fade" id="delete_modal_skills" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete skill.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_skills" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For skills Edit-->
+<div class="modal fade" id="skillsedit_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit Skills</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row edit_skills_form_div">
+            </div>
+         </div>
+         <div class="modal-footer">  
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For interviewtypes Add-->
+<div class="modal fade" id="interviewtypesadd_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add interviewtypess</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row add_interviewtypes_form_div">
+               <form id="add_interviewtypes_form" action="" >
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <label for="usrname">interviewtypes Name</label>
+                        <input type="text" required class="form-control" name="interviewtypes_name" id="interviewtypes_name" pattern="[A-Za-z]{3,20}" title="3 to 20 characters" placeholder="interviewtypes Name">
+                     </div>
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary">Add interviewtypes</button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+         <div class="modal-footer">  
+         </div>
+      </div>
+   </div>
+</div>
+<!--Modal for Delete interviewtypes -->   
+<div class="modal fade" id="delete_modal_interviewtypes" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+         </div>
+         <div class="modal-body">
+            <p class="notify_pops">Please confirm to delete Interview Type.</p>
+         </div>
+         <div class="modal-footer">
+            <button type="button" id="confirm_delete_interviewtypes" class="btn btn-success">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Modal For skills Edit-->
+<div class="modal fade" id="interviewtypesedit_modal" role="dialog">
+   <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit interviewtypes</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row edit_interviewtypes_form_div">
+            </div>
+         </div>
+         <div class="modal-footer">  
+         </div>
+      </div>
+   </div>
+</div>

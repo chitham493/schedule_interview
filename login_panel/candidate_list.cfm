@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-      <title>Candidate List2</title>
+      <title>Scheduled Candidate List</title>
       <cfinclude template="../parts/header_include.cfm">
       <cfinclude template="../parts/login_check.cfm">
    </head>
@@ -12,14 +12,14 @@
             <cfinclude template="../parts/nav_include.cfm">
             <section class="col-xs-12 col-md-10">
                <header class="jumbotron">
-                  <h2>Candidate List2 </h2>
+                  <h2>Scheduled Candidate List</h2>
                </header>
                <div id="content_real">
                   <div id="content_layout">
 
                      <main class="table">
                         <table id="table_lay_selected" class="table table-responsive">
-                           <tfoot>
+                           <!--- <tfoot>
                               <tr>
                                  <th rowspan="1" colspan="1"></th>
                                  <th rowspan="1" colspan="1">
@@ -36,7 +36,7 @@
                                  </th>
                                  <th></th>
                               </tr>
-                           </tfoot>
+                           </tfoot> --->
                         </table>
                      </main>
                   </div>

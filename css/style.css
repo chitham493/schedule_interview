@@ -295,7 +295,7 @@ label[for=date],label[for=time] {
 .add_candidate_form_div{
 	margin:auto !important;
 }
-#table_lay1  a,#table_lay2  a,#table_lay3 a,#table_lay a{
+.table_lay1  a,.table_lay2  a,.table_lay3 a,.table_lay a{
 	color: #45a2d5;
 }
 
@@ -316,6 +316,10 @@ label[for=date],label[for=time] {
 }
 .table_lay2,.table_lay3{
 	display:none;
+    width:auto !important;
+}
+#table_schedule_candidate,#table_selected_candidate{
+    width:100% !important;
 }
 .top_tabelements{
 	padding:15px;
