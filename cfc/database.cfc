@@ -4,7 +4,25 @@
     <cfargument name="candidate_id" type="string" required="true">
     <cfset variables.todaydate= dateFormat(Now(),"yyyy-mm-dd") & " " & timeFormat(now(),"HH:mm:ss.SSS")>
     <cfquery datasource="#application.datasource#" name="schedule_view_rounds">
-    select IT.Name Interview_type,S.ScheduleId ScheduleId,S.ScheduleId ScheduleId,P.PanelId PanelId,P.PanelId PanelId,S.next_schdule_status,S.Current_Status,S.Total_Mark,S.Final_Result,S.Final_Round from Schedule S INNER join InterviewRounds IR on IR.InterviewRoundId=S.InterviewRoundId  Inner join InterviewTypes IT on IT.InterviewTypeId=IR.InterviewTypeId Inner join Panel P on P.PanelId=S.PanelId where CandidateId=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> ORDER BY S.ScheduleId ASC
+      SELECT     it.NAME      interview_type, 
+                 s.scheduleid scheduleid, 
+                 s.scheduleid scheduleid, 
+                 p.panelid    panelid, 
+                 p.panelid    panelid, 
+                 s.next_schdule_status, 
+                 s.current_status, 
+                 s.total_mark, 
+                 s.final_result, 
+                 s.final_round 
+      FROM       schedule S 
+      INNER JOIN interviewrounds IR 
+      ON         ir.interviewroundid=s.interviewroundid 
+      INNER JOIN interviewtypes IT 
+      ON         it.interviewtypeid=ir.interviewtypeid 
+      INNER JOIN panel P 
+      ON         p.panelid=s.panelid 
+      WHERE      candidateid=<cfqueryparam cfsqltype="CF_SQL_INTEGER" value="#arguments.candidate_id#" /> 
+      ORDER BY   s.scheduleid ASC
   </cfquery>
   <cfoutput>
    <cfset variables.Counts_exist_round= 0>
